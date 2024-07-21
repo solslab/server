@@ -36,6 +36,20 @@ dependencies {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.4'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.4'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.4'
+
+	//spring security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//oauth
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {
