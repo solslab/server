@@ -2,6 +2,7 @@ package kr.sols.config;
 
 import kr.sols.auth.handler.CustomAccessDeniedHandler;
 import kr.sols.auth.handler.CustomAuthenticationEntryPoint;
+import kr.sols.auth.handler.OAuth2FailureHandler;
 import kr.sols.auth.handler.OAuth2SuccessHandler;
 import kr.sols.auth.jwt.TokenAuthenticationFilter;
 import kr.sols.auth.jwt.TokenExceptionFilter;
@@ -53,16 +54,26 @@ public class SecurityConfig {
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 안 함
 
                 // 요청 인증 및 인가 설정
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/index.html").permitAll()
-                        .requestMatchers("/auth/success").permitAll()
+                .authorizeHttpRequests(request ->
+                        request.requestMatchers(
+                                        new AntPathRequestMatcher("/"),
+                                        new AntPathRequestMatcher("/index.html"),
+                                        new AntPathRequestMatcher("/auth/success")
+                                ).permitAll()
+                                .anyRequest().authenticated()
                 )
+
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/").permitAll()
+//                        .requestMatchers("/index.html").permitAll()
+//                        .requestMatchers("/auth/success").permitAll()
+//                )
 
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth ->
                         oauth.userInfoEndpoint(c -> c.userService(oAuth2UserService)) // 사용자 정보 가져오는 설정
                                 .successHandler(oAuth2SuccessHandler) // 로그인 성공 핸들러 설정
+                                .failureHandler(new OAuth2FailureHandler())
                 )
 
                 // JWT 필터 설정

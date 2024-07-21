@@ -5,13 +5,14 @@ import kr.sols.common.KeyGenerator;
 import kr.sols.domain.member.Member;
 import kr.sols.domain.member.Role;
 import java.util.Map;
+
+import kr.sols.domain.member.SocialType;
 import lombok.Builder;
 
 @Builder
 public record OAuth2UserInfo(
         String name,
-        String email,
-        String profile
+        String email
 ) {
 
     public static OAuth2UserInfo of(String registrationId, Map<String, Object> attributes) {
@@ -37,15 +38,20 @@ public record OAuth2UserInfo(
         return OAuth2UserInfo.builder()
                 .name((String) profile.get("nickname"))
                 .email((String) account.get("email"))
-                .profile((String) profile.get("profile_image_url"))
                 .build();
     }
 
-    public Member toEntity() {
+    public Member toEntity(String registrationId) {
+        SocialType socialType = switch (registrationId) {
+            case "kakao" -> SocialType.KAKAO;
+            // case "google" -> SocialType.GOOGLE; // Uncomment when Google is implemented
+            default -> throw new AuthException(ILLEGAL_REGISTRATION_ID);
+        };
+
         return Member.builder()
                 .name(name)
                 .email(email)
-                .profile(profile)
+                .socialType(socialType)
                 .memberKey(KeyGenerator.generateKey())
                 .role(Role.USER)
                 .build();

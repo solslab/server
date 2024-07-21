@@ -30,37 +30,28 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, length = 20, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String profile;
-
     @Column(nullable = false, unique = true)
     private String memberKey;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-//    @Embedded
-//    private Address address;
-
     @Builder
-    public Member(String name, String email, String profile, String memberKey, Role role) {
+    public Member(String name, String email, SocialType socialType, String memberKey, Role role) {
         this.name = name;
         this.email = email;
-        this.profile = profile;
+        this.socialType = socialType;
         this.memberKey = memberKey;
         this.role = role;
     }
 
-//    public void addAddress(Address address) {
-//        this.address = address;
-//    }
-
     public void updateMember(MemberEditRequest request) {
         this.name = request.name();
 
-//        if (request.address() != null) {
-//            this.address = request.address().toEntity();
-//        }
     }
 }

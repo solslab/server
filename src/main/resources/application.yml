@@ -9,10 +9,20 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+  data:
+    redis:
+      port: 6379
+      host: localhost
+  servlet:
+    multipart:
+      file-size-threshold: 2MB
+      location: /tmp/s3
+      max-file-size: 2MB
+      max-request-size: 12MB
 
 logging.level:
   org.hibernate.SQL: debug

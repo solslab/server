@@ -19,25 +19,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    // JWT 토큰 처리 및 검증을 담당하는 서비스
     private final TokenProvider tokenProvider;
 
-    /**
-     * 요청을 처리하는 메소드로, JWT 토큰을 검사하고 인증을 설정합니다.
-     *
-     * @param request   HttpServletRequest 객체
-     * @param response  HttpServletResponse 객체
-     * @param filterChain 다음 필터 체인
-     * @throws ServletException
-     * @throws IOException
-     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("hi");
+
+        System.out.println("토큰추출시도");
+        System.out.println(request.getHeader("Authorization"));
         // 요청에서 JWT 토큰을 추출합니다.
         String accessToken = resolveToken(request);
-
+        System.out.println(accessToken);
+        System.out.println("토큰추출끝");
         // 토큰이 유효한지 검증합니다.
         if (tokenProvider.validateToken(accessToken)) {
             // 토큰이 유효하다면 인증 정보를 설정합니다.
@@ -58,22 +51,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    /**
-     * JWT 토큰을 인증 정보로 변환하고 SecurityContext에 설정합니다.
-     *
-     * @param accessToken JWT 액세스 토큰
-     */
     private void setAuthentication(String accessToken) {
         Authentication authentication = tokenProvider.getAuthentication(accessToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    /**
-     * 요청 헤더에서 JWT 토큰을 추출합니다.
-     *
-     * @param request HttpServletRequest 객체
-     * @return JWT 액세스 토큰 또는 null
-     */
+
     private String resolveToken(HttpServletRequest request) {
         String token = request.getHeader(AUTHORIZATION);
         if (ObjectUtils.isEmpty(token) || !token.startsWith("Bearer ")) {
