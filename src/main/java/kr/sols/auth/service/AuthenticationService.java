@@ -4,8 +4,8 @@ import static kr.sols.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static kr.sols.exception.ErrorCode.NO_ACCESS;
 
 import kr.sols.auth.exception.AuthException;
-import kr.sols.domain.member.Member;
-import kr.sols.repository.MemberRepository;
+import kr.sols.member.domain.Member;
+import kr.sols.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

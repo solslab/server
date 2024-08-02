@@ -1,4 +1,4 @@
-package kr.sols.domain.member;
+package kr.sols.member.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package kr.sols.dto.member;
+package kr.sols.member.dto;
 import jakarta.validation.constraints.NotBlank;
 
 public record MemberEditRequest(

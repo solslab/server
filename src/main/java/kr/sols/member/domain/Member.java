@@ -1,6 +1,6 @@
-package kr.sols.domain.member;
+package kr.sols.member.domain;
 
-import kr.sols.dto.member.MemberEditRequest;
+import kr.sols.member.dto.MemberEditRequest;
 import kr.sols.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 //import jakarta.persistence.Embedded;

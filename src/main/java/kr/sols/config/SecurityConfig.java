@@ -63,12 +63,6 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
 
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/").permitAll()
-//                        .requestMatchers("/index.html").permitAll()
-//                        .requestMatchers("/auth/success").permitAll()
-//                )
-
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth ->
                         oauth.userInfoEndpoint(c -> c.userService(oAuth2UserService)) // 사용자 정보 가져오는 설정
