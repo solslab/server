@@ -9,7 +9,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -25,5 +25,6 @@ spring:
       max-request-size: 12MB
 
 logging.level:
+  org.springframework.boot.autoconfigure: ERROR
   org.hibernate.SQL: debug
   org.springframework.security: debug

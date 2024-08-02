@@ -44,7 +44,7 @@ public record OAuth2UserInfo(
     public Member toEntity(String registrationId) {
         SocialType socialType = switch (registrationId) {
             case "kakao" -> SocialType.KAKAO;
-            // case "google" -> SocialType.GOOGLE; // Uncomment when Google is implemented
+            // case "google" -> SocialType.GOOGLE;
             default -> throw new AuthException(ILLEGAL_REGISTRATION_ID);
         };
 
