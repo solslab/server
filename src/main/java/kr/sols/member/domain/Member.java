@@ -1,19 +1,18 @@
 package kr.sols.member.domain;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import kr.sols.common.StringListConverter;
 import kr.sols.member.dto.MemberEditRequest;
 import kr.sols.common.BaseTimeEntity;
-import jakarta.persistence.Column;
 //import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,6 +32,19 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String memberKey;
 
+    @Convert(converter = StringListConverter.class)
+    private List<String> preferLanguages;
+
+    @Min(0)
+    @Max(36)
+    private Integer memberTier;
+
+    @Convert(converter = StringListConverter.class)
+    private List<String> preferPositions;
+
+    @Convert(converter = StringListConverter.class)
+    private List<String> preferIndustries;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
@@ -41,17 +53,32 @@ public class Member extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+
     @Builder
-    public Member(String name, String email, SocialType socialType, String memberKey, Role role) {
+    public Member(String name, String email, SocialType socialType, List<String> preferLanguages, Integer memberTier, List<String> preferPositions, List<String> preferIndustries, String memberKey, Role role) {
         this.name = name;
         this.email = email;
         this.socialType = socialType;
+        this.memberTier = memberTier;
+        this.preferLanguages = preferLanguages;
+        this.preferPositions = preferPositions;
+        this.preferIndustries = preferIndustries;
         this.memberKey = memberKey;
         this.role = role;
     }
 
     public void updateMember(MemberEditRequest request) {
-        this.name = request.name();
-
+        if (request.getMemberTier() != null) {
+            this.memberTier = request.getMemberTier();
+        }
+        if (request.getPreferLanguages() != null) {
+            this.preferLanguages = request.getPreferLanguages();
+        }
+        if (request.getPreferLanguages() != null) {
+            this.preferPositions = request.getPreferPositions();
+        }
+        if (request.getPreferLanguages() != null) {
+            this.preferIndustries = request.getPreferIndustries();
+        }
     }
 }

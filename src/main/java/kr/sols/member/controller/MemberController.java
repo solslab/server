@@ -5,21 +5,19 @@ import kr.sols.member.dto.MemberDto;
 import kr.sols.member.dto.MemberEditRequest;
 import kr.sols.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/members")
+@RequestMapping("/member")
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
     private final MemberService memberService;
 
+    // 회원 조회
     @RoleUser
     @GetMapping
     public ResponseEntity<MemberDto> memberInfo(
@@ -27,11 +25,13 @@ public class MemberController {
         return ResponseEntity.ok(memberService.memberInfo(userDetails.getUsername()));
     }
 
+    // 회원가입 추가정보 입력 및 회원수정
     @RoleUser
-    @PatchMapping
-    public ResponseEntity<MemberDto> memberEdit(
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void memberEdit(
             @RequestBody @Valid MemberEditRequest request,
             @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(memberService.memberEdit(request, userDetails.getUsername()));
+        memberService.memberEdit(request, userDetails.getUsername());
     }
 }
