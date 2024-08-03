@@ -23,7 +23,7 @@ public class MemberController {
     // 회원 조회 (마이페이지)
     @RoleUser
     @GetMapping
-    public ResponseEntity<MemberDto> memberInfo(
+    public ResponseEntity<MemberDto> getMyPageInfo(
             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(memberService.memberInfo(userDetails.getUsername()));
     }
@@ -42,5 +42,13 @@ public class MemberController {
     @GetMapping("list")
     public List<MemberListDto> getMemberList() {
         return memberService.getAllMember();
+    }
+
+    // 회원 상세 조회 (관리자)
+    @GetMapping("/{memberKey}")
+    public ResponseEntity<MemberDto> getMember(
+            @PathVariable String memberKey
+    ) {
+        return ResponseEntity.ok(memberService.memberInfo(memberKey));
     }
 }
