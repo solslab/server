@@ -3,6 +3,7 @@ import jakarta.validation.Valid;
 import kr.sols.auth.annotation.RoleUser;
 import kr.sols.member.dto.MemberDto;
 import kr.sols.member.dto.MemberEditRequest;
+import kr.sols.member.dto.MemberListDto;
 import kr.sols.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,13 +12,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/member")
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
     private final MemberService memberService;
 
-    // 회원 조회
+    // 회원 조회 (마이페이지)
     @RoleUser
     @GetMapping
     public ResponseEntity<MemberDto> memberInfo(
@@ -29,9 +32,15 @@ public class MemberController {
     @RoleUser
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public void memberEdit(
+    public ResponseEntity<MemberDto> memberEdit(
             @RequestBody @Valid MemberEditRequest request,
             @AuthenticationPrincipal UserDetails userDetails) {
-        memberService.memberEdit(request, userDetails.getUsername());
+        return ResponseEntity.ok(memberService.memberEdit(request, userDetails.getUsername()));
+    }
+
+    // 모든 회원 조회 (관리자)
+    @GetMapping("list")
+    public List<MemberListDto> getMemberList() {
+        return memberService.getAllMember();
     }
 }

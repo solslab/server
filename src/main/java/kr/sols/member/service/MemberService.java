@@ -3,11 +3,15 @@ import static kr.sols.exception.ErrorCode.MEMBER_NOT_FOUND;
 import kr.sols.member.domain.Member;
 import kr.sols.member.dto.MemberDto;
 import kr.sols.member.dto.MemberEditRequest;
+import kr.sols.member.dto.MemberListDto;
 import kr.sols.member.exception.MemberException;
 import kr.sols.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -30,5 +34,12 @@ public class MemberService {
     public Member findByMemberKeyOrThrow(String memberKey) {
         return memberRepository.findByMemberKey(memberKey)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
+
+    public List<MemberListDto> getAllMember() {
+        List<Member> memberList = memberRepository.findAllByOrderByCreatedDateDesc();
+        return memberList.stream()
+                .map(MemberListDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }

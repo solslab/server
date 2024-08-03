@@ -74,10 +74,10 @@ public class Member extends BaseTimeEntity {
         if (request.getPreferLanguages() != null) {
             this.preferLanguages = request.getPreferLanguages();
         }
-        if (request.getPreferLanguages() != null) {
+        if (request.getPreferPositions() != null) {
             this.preferPositions = request.getPreferPositions();
         }
-        if (request.getPreferLanguages() != null) {
+        if (request.getPreferIndustries() != null) {
             this.preferIndustries = request.getPreferIndustries();
         }
     }
