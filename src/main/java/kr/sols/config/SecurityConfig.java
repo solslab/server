@@ -20,6 +20,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Collections;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -41,12 +45,24 @@ public class SecurityConfig {
                 .requestMatchers("/error", "/favicon.ico");
     }
 
+    // ⭐️ CORS 설정
+    CorsConfigurationSource corsConfigurationSource() {
+        return request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedHeaders(Collections.singletonList("*"));
+            config.setAllowedMethods(Collections.singletonList("*"));
+            config.setAllowedOriginPatterns(Collections.singletonList("http://127.0.0.1:5500")); // ⭐️ 허용할 origin
+            config.setAllowCredentials(true);
+            return config;
+        };
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // REST API 설정
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
-                .cors(AbstractHttpConfigurer::disable) // CORS 비활성화
+                .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .httpBasic(AbstractHttpConfigurer::disable) // 기본 인증 로그인 비활성화
                 .formLogin(AbstractHttpConfigurer::disable) // 기본 로그인 폼 비활성화
                 .logout(AbstractHttpConfigurer::disable) // 기본 로그아웃 비활성화
@@ -58,7 +74,8 @@ public class SecurityConfig {
                         request.requestMatchers(
                                         new AntPathRequestMatcher("/"),
                                         new AntPathRequestMatcher("/index.html"),
-                                        new AntPathRequestMatcher("/auth/success")
+                                        new AntPathRequestMatcher("/auth/success"),
+                                        new AntPathRequestMatcher("/member/list")
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )

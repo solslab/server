@@ -20,13 +20,11 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final TokenProvider tokenProvider;
 
     // 인증 성공 후 리다이렉트할 URI
-    private static final String URI = "/auth/success";
+    private static final String URI = "http://127.0.0.1:5500/auth-callback.html";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        System.out.println("성공");
-
         // 액세스 토큰 생성
         String accessToken = tokenProvider.generateAccessToken(authentication);
         System.out.println(accessToken);
