@@ -51,7 +51,7 @@ public class SecurityConfig {
             CorsConfiguration config = new CorsConfiguration();
             config.setAllowedHeaders(Collections.singletonList("*"));
             config.setAllowedMethods(Collections.singletonList("*"));
-            config.setAllowedOriginPatterns(Collections.singletonList("http://127.0.0.1:5500")); // ⭐️ 허용할 origin
+            config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:3000")); // ⭐️ 허용할 origin
             config.setAllowCredentials(true);
             return config;
         };
@@ -70,15 +70,25 @@ public class SecurityConfig {
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 안 함
 
                 // 요청 인증 및 인가 설정
-                .authorizeHttpRequests(request ->
-                        request.requestMatchers(
-                                        new AntPathRequestMatcher("/"),
-                                        new AntPathRequestMatcher("/index.html"),
-                                        new AntPathRequestMatcher("/auth/success"),
-                                        new AntPathRequestMatcher("/member/list")
-                                ).permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/index.html").permitAll()
+                        .requestMatchers("/auth/success").permitAll()
+                        .requestMatchers("/member/list").permitAll()
+                        .requestMatchers("/teams/**").permitAll()
+                        .anyRequest().authenticated()
                 )
+
+//                .authorizeHttpRequests(request ->
+//                        request.requestMatchers(
+//                                        new AntPathRequestMatcher("/"),
+//                                        new AntPathRequestMatcher("/index.html"),
+//                                        new AntPathRequestMatcher("/auth/success"),
+//                                        new AntPathRequestMatcher("/member/list"),
+//                                        new AntPathRequestMatcher("/teams/**")
+//                                ).permitAll()
+//                                .anyRequest().authenticated()
+//                )
 
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth ->

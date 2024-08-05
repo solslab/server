@@ -21,8 +21,21 @@ spring:
     multipart:
       file-size-threshold: 2MB
       location: /tmp/s3
-      max-file-size: 2MB
-      max-request-size: 12MB
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+cloud:
+  aws:
+    s3:
+      bucket: solslab
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: ${AWS_ACCESS}
+      secret-key: ${AWS_SECRET}
 
 logging.level:
   org.springframework.boot.autoconfigure: ERROR
