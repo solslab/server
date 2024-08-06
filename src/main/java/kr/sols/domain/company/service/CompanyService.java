@@ -1,15 +1,16 @@
 package kr.sols.domain.company.service;
 
-import kr.sols.domain.company.dto.CompanyDto;
+import kr.sols.domain.company.dto.*;
 import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.company.exception.CompanyException;
-import kr.sols.domain.company.dto.CompanyLogoDto;
 import kr.sols.domain.company.repository.CompanyRepository;
 import kr.sols.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.Optional;
@@ -25,77 +26,85 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
 
     @Transactional
-    public CompanyDto createCompany(CompanyDto companyDto) {
-        if (companyRepository.existsByCompanyName(companyDto.getCompanyName())) {
+    public CompanyIdDto createCompany(CompanyRequestDto companyRequestDto) {
+        if (companyRepository.existsByCompanyName(companyRequestDto.getCompanyName())) {
             throw new CompanyException(DUPLICATED_COMPANY_NAME);
         }
-            Company company = Company.builder()
-                .companyName(companyDto.getCompanyName())
-                .industryType(companyDto.getIndustryType())
-                .companyLogo(companyDto.getCompanyLogo())
+        Company company = Company.builder()
+                .companyName(companyRequestDto.getCompanyName())
+                .industryType(companyRequestDto.getIndustryType())
                 .build();
 
         Company savedCompany = companyRepository.save(company);
-        return CompanyDto.fromEntity(savedCompany);
+        return new CompanyIdDto(savedCompany.getId());
     }
 
-    public List<CompanyDto> getAllCompanies() {
-        List<Company> companyList = companyRepository.findAll();
-        return companyList.stream()
-                .map(CompanyDto::fromEntity)
+    @Transactional(readOnly = true)
+    public List<CompanyListDto> getAllCompanies() {
+        List<Company> companies = companyRepository.findAllByOrderByCompanyNameAsc();
+        return companies.stream()
+                .map(CompanyListDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public CompanyDto getCompany(UUID id) {
+    public CompanyDetailDto getCompany(UUID id) {
         Optional<Company> company = companyRepository.findById(id);
-        return company.map(CompanyDto::fromEntity).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
+        return company.map(CompanyDetailDto::fromEntity).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
     }
 
     @Transactional
-    public CompanyDto updateCompany(UUID id, CompanyDto companyDto) {
+    public CompanyDetailDto updateCompany(UUID id, CompanyRequestDto companyRequestDto) {
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
-        company.setCompanyName(companyDto.getCompanyName());
-        company.setIndustryType(companyDto.getIndustryType());
+        company.setCompanyName(companyRequestDto.getCompanyName());
+        company.setIndustryType(companyRequestDto.getIndustryType());
 
         Company updatedCompany = companyRepository.save(company);
-        return CompanyDto.fromEntity(updatedCompany);
+        return CompanyDetailDto.fromEntity(updatedCompany);
     }
 
     @Transactional
     public void deleteCompany(UUID id) {
-        if (!companyRepository.existsById(id)) {
-            throw new CompanyException(COMPANY_NOT_FOUND);
+        // 404 처리
+        Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
+
+        // 로고가 있다면 S3에서 삭제
+        if (company.getCompanyLogo() != null) {
+            s3Service.deleteFile(company.getCompanyLogo());
         }
-        // S3에서 로고 이미지 삭제
-        Optional<CompanyLogoDto> targetLogoUrlOpt = companyRepository.findCompanyLogoById(id);
-        targetLogoUrlOpt.ifPresent(targetLogoUrl -> s3Service.deleteFile(targetLogoUrl.getCompanyLogo()));
 
         companyRepository.deleteById(id);
     }
 
     @Transactional
-    public String uploadCompanyLogo(UUID id, String logoUrl) {
+    public CompanyLogoDto uploadCompanyLogo(UUID id, String fileName, MultipartFile multipartFile, String extend) throws IOException {
+        // 404 처리
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
 
         // 이미 로고가 있다면 S3에서 삭제
-        Optional<CompanyLogoDto> targetLogoUrlOpt = companyRepository.findCompanyLogoById(id);
-        targetLogoUrlOpt.ifPresent(targetLogoUrl -> s3Service.deleteFile(targetLogoUrl.getCompanyLogo()));
+        if (company.getCompanyLogo() != null) {
+            s3Service.deleteFile(company.getCompanyLogo());
+        }
 
-        company.setCompanyLogo(logoUrl); // 로고 등록(교체)
+        // 로고 등록(교체)
+        String url = s3Service.upload(fileName, multipartFile, extend);
+        company.setCompanyLogo(url);
         companyRepository.save(company);
-        return logoUrl;
+
+        // DTO로 반환
+        return new CompanyLogoDto(url);
     }
 
     @Transactional
     public void deleteCompanyLogo(UUID id) {
-        // S3에서 삭제
-        Optional<CompanyLogoDto> targetLogoUrlOpt = companyRepository.findCompanyLogoById(id);
-        targetLogoUrlOpt.ifPresent(targetLogoUrl -> s3Service.deleteFile(targetLogoUrl.getCompanyLogo()));
-
-        // DB에서 삭제
+        // 404 처리
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
-        company.setCompanyLogo(null);
+
+        // 로고가 있다면 삭제
+        if (company.getCompanyLogo() != null) {
+            s3Service.deleteFile(company.getCompanyLogo()); // S3
+            company.setCompanyLogo(null); // DB
+        }
 
         companyRepository.save(company);
     }

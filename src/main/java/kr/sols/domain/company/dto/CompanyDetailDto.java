@@ -1,7 +1,6 @@
 package kr.sols.domain.company.dto;
 
 import kr.sols.domain.company.entity.Company;
-import kr.sols.domain.company.entity.IndustryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,20 +13,16 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompanyDto {
-    private UUID id;
+public class CompanyDetailDto {
     private String companyName;
     private List<String> industryType;
     private String companyLogo;
 
-    public static CompanyDto fromEntity(Company company) {
-        CompanyDto companyDto = CompanyDto.builder()
-                .id(company.getId())
+    public static CompanyDetailDto fromEntity(Company company) {
+        return CompanyDetailDto.builder()
                 .companyName(company.getCompanyName())
-                .companyLogo(company.getCompanyLogo())
-                .industryType(company.getIndustryType())
+                .industryType(company.getIndustryType()) // 필요에 따라 변환할 수 있음
+                .companyLogo(company.getCompanyLogo()) // 필요에 따라 변환할 수 있음
                 .build();
-
-        return companyDto;
     }
 }

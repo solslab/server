@@ -1,13 +1,11 @@
 package kr.sols.domain.company.controller;
 
 import kr.sols.common.TypeValidator;
-import kr.sols.domain.company.dto.CompanyDto;
+import kr.sols.domain.company.dto.*;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.service.CompanyService;
-import kr.sols.domain.member.dto.MemberListDto;
 import kr.sols.s3.S3Service;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,31 +28,31 @@ public class CompanyController {
 
     // 기업 생성
     @PostMapping
-    public ResponseEntity<CompanyDto> createCompany(@RequestBody CompanyDto companyDto) {
+    public ResponseEntity<CompanyIdDto> createCompany(@RequestBody CompanyRequestDto companyRequestDto) {
         // 검증 로직
-        if (!TypeValidator.isValidIndustryTypeList(companyDto.getIndustryType())) {
+        if (!TypeValidator.isValidIndustryTypeList(companyRequestDto.getIndustryType())) {
             throw new CompanyException(INVALID_INDUSTRY_TYPE);
         }
 
         // 회사 생성 로직
-        CompanyDto createdCompany = companyService.createCompany(companyDto);
+        CompanyIdDto createdCompany = companyService.createCompany(companyRequestDto);
         return ResponseEntity.ok(createdCompany);
     }
 
     // 기업 전체 조회
     @GetMapping
-    public List<CompanyDto> getAllCompanies() {
-        return companyService.getAllCompanies(); }
+    public List<CompanyListDto> getAllCompanies() {
+        return companyService.getAllCompanies();
+    }
 
     // 기업 수정
     @PutMapping("/{id}")
-    public ResponseEntity<CompanyDto> updateCompany(@PathVariable UUID id, @RequestBody CompanyDto companyDto) {
-        CompanyDto updatedCompany = companyService.updateCompany(id, companyDto);
+    public ResponseEntity<CompanyDetailDto> updateCompany(@PathVariable UUID id, @RequestBody CompanyRequestDto companyRequestDto) {
+        CompanyDetailDto updatedCompany = companyService.updateCompany(id, companyRequestDto);
         return ResponseEntity.ok(updatedCompany);
     }
 
     // 기업 삭제
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable UUID id) {
         companyService.deleteCompany(id);
@@ -63,18 +61,11 @@ public class CompanyController {
 
     // 기업 로고 생성(변경)
     @PostMapping(path = "/{id}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadCompanyLogo(@PathVariable UUID id,
-                                                    @RequestPart(value = "fileName") String fileName,
-                                                    @RequestPart(value = "file", required = false) MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<CompanyLogoDto> uploadCompanyLogo(@PathVariable UUID id,
+                                                            @RequestPart(value = "fileName") String fileName,
+                                                            @RequestPart(value = "file", required = false) MultipartFile multipartFile) throws IOException {
         String extend = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
-        String url = s3Service.upload(fileName, multipartFile, extend);
-        companyService.uploadCompanyLogo(id, url);
-
-        String responseBody = "{\"imageUrl\": \"" + url + "\"}";
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(responseBody);
+        return ResponseEntity.ok(companyService.uploadCompanyLogo(id, fileName, multipartFile, extend));
     }
 
     // 기업 로고 삭제
@@ -86,8 +77,8 @@ public class CompanyController {
 
     // 기업 조회
     @GetMapping("/{id}")
-    public ResponseEntity<CompanyDto> getCompany(@PathVariable UUID id) {
-        CompanyDto company = companyService.getCompany(id);
+    public ResponseEntity<CompanyDetailDto> getCompany(@PathVariable UUID id) {
+        CompanyDetailDto company = companyService.getCompany(id);
         return ResponseEntity.ok(company);
     }
 

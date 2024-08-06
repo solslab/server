@@ -1,5 +1,6 @@
 package kr.sols.domain.member.repository;
 
+import kr.sols.domain.member.dto.MemberListDto;
 import kr.sols.domain.member.entity.Member;
 
 import java.util.List;
@@ -12,5 +13,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByMemberKey(String memberKey);
 
-    List<Member> findAllByOrderByCreatedDateDesc();
+    List<MemberListDto> findAllByOrderByCreatedDateDesc();
 }

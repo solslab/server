@@ -20,7 +20,7 @@ public enum ErrorCode {
     // company
     COMPANY_NOT_FOUND(NOT_FOUND, "기업을 찾을 수 없습니다."),
     DUPLICATED_COMPANY_NAME(CONFLICT, "이미 등록된 기업명입니다."),
-    INVALID_INDUSTRY_TYPE(BAD_REQUEST, "등록되지 않은 Industy 값입니다."),
+    INVALID_INDUSTRY_TYPE(BAD_REQUEST, "등록되지 않은 Industry 값입니다."),
 
     // S3
     FAIL_TO_CONVERT_FILE(BAD_REQUEST, "MultipartFile을 File로 전환하는데 실패했습니다."),

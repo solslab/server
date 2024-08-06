@@ -38,9 +38,6 @@ public class MemberService {
     }
 
     public List<MemberListDto> getAllMember() {
-        List<Member> memberList = memberRepository.findAllByOrderByCreatedDateDesc();
-        return memberList.stream()
-                .map(MemberListDto::fromEntity)
-                .collect(Collectors.toList());
+        return memberRepository.findAllByOrderByCreatedDateDesc();
     }
 }
