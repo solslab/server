@@ -82,4 +82,13 @@ public class CompanyController {
         return ResponseEntity.ok(company);
     }
 
+
+    // 기업 검색
+    @GetMapping("/search")
+    public ResponseEntity<List<CompanyListDto>> searchCompanies(
+            @RequestParam(value = "q", defaultValue = "") String searchTerm) {
+        List<CompanyListDto> companies = companyService.searchCompanies(searchTerm);
+        return ResponseEntity.ok(companies);
+    }
+
 }

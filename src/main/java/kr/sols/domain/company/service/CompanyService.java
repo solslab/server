@@ -108,4 +108,17 @@ public class CompanyService {
 
         companyRepository.save(company);
     }
+
+    @Transactional
+    public List<CompanyListDto> searchCompanies(String searchTerm) {
+        if (searchTerm == null || searchTerm.isBlank()) {
+            return List.of();
+        }
+
+        List<Company> companies = companyRepository.findByCompanyNameStartingWith(searchTerm);
+
+        return companies.stream()
+                .map(CompanyListDto::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

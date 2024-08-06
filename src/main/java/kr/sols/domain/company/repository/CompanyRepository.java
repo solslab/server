@@ -18,4 +18,6 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
     boolean existsByCompanyName(String companyName);
     List<Company> findAllByOrderByCompanyNameAsc();;
     Optional<Company> findById(UUID id);
+    List<Company> findByCompanyNameStartingWith(String searchTerm);
+
 }
