@@ -1,10 +1,10 @@
-package kr.sols.member.domain;
+package kr.sols.domain.member.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import kr.sols.common.StringListConverter;
-import kr.sols.member.dto.MemberEditRequest;
+import kr.sols.domain.member.dto.MemberEditRequest;
 import kr.sols.common.BaseTimeEntity;
 //import jakarta.persistence.Embedded;
 import lombok.AccessLevel;

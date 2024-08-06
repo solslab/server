@@ -1,10 +1,10 @@
-package kr.sols.member.controller;
+package kr.sols.domain.member.controller;
 import jakarta.validation.Valid;
 import kr.sols.auth.annotation.RoleUser;
-import kr.sols.member.dto.MemberDto;
-import kr.sols.member.dto.MemberEditRequest;
-import kr.sols.member.dto.MemberListDto;
-import kr.sols.member.service.MemberService;
+import kr.sols.domain.member.dto.MemberDto;
+import kr.sols.domain.member.dto.MemberEditRequest;
+import kr.sols.domain.member.dto.MemberListDto;
+import kr.sols.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +39,7 @@ public class MemberController {
     }
 
     // 모든 회원 조회 (관리자)
-    @GetMapping("list")
+    @GetMapping("/list")
     public List<MemberListDto> getMemberList() {
         return memberService.getAllMember();
     }

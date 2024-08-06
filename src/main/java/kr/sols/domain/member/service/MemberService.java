@@ -1,11 +1,12 @@
-package kr.sols.member.service;
+package kr.sols.domain.member.service;
 import static kr.sols.exception.ErrorCode.MEMBER_NOT_FOUND;
-import kr.sols.member.domain.Member;
-import kr.sols.member.dto.MemberDto;
-import kr.sols.member.dto.MemberEditRequest;
-import kr.sols.member.dto.MemberListDto;
-import kr.sols.member.exception.MemberException;
-import kr.sols.member.repository.MemberRepository;
+
+import kr.sols.domain.member.exception.MemberException;
+import kr.sols.domain.member.repository.MemberRepository;
+import kr.sols.domain.member.entity.Member;
+import kr.sols.domain.member.dto.MemberDto;
+import kr.sols.domain.member.dto.MemberEditRequest;
+import kr.sols.domain.member.dto.MemberListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

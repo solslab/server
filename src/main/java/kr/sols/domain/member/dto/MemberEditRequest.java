@@ -1,4 +1,4 @@
-package kr.sols.member.dto;
+package kr.sols.domain.member.dto;
 
 import lombok.Getter;
 import lombok.Setter;

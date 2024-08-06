@@ -71,24 +71,17 @@ public class SecurityConfig {
 
                 // 요청 인증 및 인가 설정
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/index.html").permitAll()
-                        .requestMatchers("/auth/success").permitAll()
-                        .requestMatchers("/member/list").permitAll()
-                        .requestMatchers("/teams/**").permitAll()
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/"),
+                                new AntPathRequestMatcher("index.html"),
+                                new AntPathRequestMatcher("/auth/success"),
+                                new AntPathRequestMatcher("/member/**"),
+                                new AntPathRequestMatcher("/company/**")
+                        ).permitAll()
+//                        .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).hasRole(Role.USER.name())
                         .anyRequest().authenticated()
                 )
 
-//                .authorizeHttpRequests(request ->
-//                        request.requestMatchers(
-//                                        new AntPathRequestMatcher("/"),
-//                                        new AntPathRequestMatcher("/index.html"),
-//                                        new AntPathRequestMatcher("/auth/success"),
-//                                        new AntPathRequestMatcher("/member/list"),
-//                                        new AntPathRequestMatcher("/teams/**")
-//                                ).permitAll()
-//                                .anyRequest().authenticated()
-//                )
 
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth ->

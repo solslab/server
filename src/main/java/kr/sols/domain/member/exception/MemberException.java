@@ -1,4 +1,4 @@
-package kr.sols.member.exception;
+package kr.sols.domain.member.exception;
 
 import kr.sols.exception.CustomException;
 import kr.sols.exception.ErrorCode;

@@ -1,6 +1,7 @@
 package kr.sols.exception;
 
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public abstract class CustomException extends RuntimeException {
@@ -18,5 +19,9 @@ public abstract class CustomException extends RuntimeException {
         super(message);
         this.errorCode = errorCode;
         this.message = message;
+    }
+
+    public HttpStatus getStatus() {
+        return errorCode.getStatus();
     }
 }

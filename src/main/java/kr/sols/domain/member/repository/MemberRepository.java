@@ -1,6 +1,6 @@
-package kr.sols.member.repository;
+package kr.sols.domain.member.repository;
 
-import kr.sols.member.domain.Member;
+import kr.sols.domain.member.entity.Member;
 
 import java.util.List;
 import java.util.Optional;

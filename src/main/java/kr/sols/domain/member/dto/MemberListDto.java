@@ -1,6 +1,6 @@
-package kr.sols.member.dto;
-import kr.sols.member.domain.Member;
-import kr.sols.member.domain.SocialType;
+package kr.sols.domain.member.dto;
+import kr.sols.domain.member.entity.Member;
+import kr.sols.domain.member.entity.SocialType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

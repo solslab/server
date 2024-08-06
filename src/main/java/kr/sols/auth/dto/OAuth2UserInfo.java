@@ -2,11 +2,11 @@ package kr.sols.auth.dto;
 import static kr.sols.exception.ErrorCode.ILLEGAL_REGISTRATION_ID;
 import kr.sols.auth.exception.AuthException;
 import kr.sols.common.KeyGenerator;
-import kr.sols.member.domain.Member;
-import kr.sols.member.domain.Role;
+import kr.sols.domain.member.entity.Member;
+import kr.sols.domain.member.entity.Role;
 import java.util.Map;
 
-import kr.sols.member.domain.SocialType;
+import kr.sols.domain.member.entity.SocialType;
 import lombok.Builder;
 
 @Builder

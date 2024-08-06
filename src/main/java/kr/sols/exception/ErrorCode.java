@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
-@RequiredArgsConstructor
 public enum ErrorCode {
     // auth
     ILLEGAL_REGISTRATION_ID(NOT_ACCEPTABLE, "illegal registration id"),
@@ -18,6 +17,14 @@ public enum ErrorCode {
     // member
     MEMBER_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다."),
 
+    // company
+    COMPANY_NOT_FOUND(NOT_FOUND, "기업을 찾을 수 없습니다."),
+    DUPLICATED_COMPANY_NAME(CONFLICT, "이미 등록된 기업명입니다."),
+    INVALID_INDUSTRY_TYPE(BAD_REQUEST, "등록되지 않은 Industy 값입니다."),
+
+    // S3
+    FAIL_TO_CONVERT_FILE(BAD_REQUEST, "MultipartFile을 File로 전환하는데 실패했습니다."),
+
     // global
     RESOURCE_LOCKED(LOCKED, "자원이 잠겨 있어 접근할 수 없습니다."),
     NO_ACCESS(FORBIDDEN, "접근 권한이 없습니다."),
@@ -25,6 +32,19 @@ public enum ErrorCode {
     INVALID_REQUEST(BAD_REQUEST, "올바르지 않은 요청입니다."),
     INTERNAL_ERROR(INTERNAL_SERVER_ERROR, "예상치 못한 에러가 발생했습니다.");
 
-    private final HttpStatus httpStatus;
+    private final HttpStatus status;
     private final String message;
+
+
+    ErrorCode(HttpStatus status, String message) {
+        this.status = status;
+        this.message = message;
+    }
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }
