@@ -9,11 +9,8 @@ public class TypeValidator {
         return industryTypes.stream().allMatch(IndustryType::isValid);
     }
 
-    public static void main(String[] args) {
-        List<String> industryTypes = List.of("빅테크");
-        boolean isValid = isValidIndustryTypeList(industryTypes);
-        System.out.println("Is the industry type list valid? " + isValid);
-    }
-
+//    public static boolean isValidSupportLanguagesTypeList(List<String> supportLanguages) {
+//        return supportLanguages.stream().allMatch(Sup::isValid);
+//    }
 
 }

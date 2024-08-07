@@ -1,0 +1,59 @@
+package kr.sols.domain.position.controller;
+
+import kr.sols.domain.position.dto.PositionCreatedResponse;
+import kr.sols.domain.position.dto.PositionDto;
+import kr.sols.domain.position.dto.PositionListDto;
+import kr.sols.domain.position.service.PositionService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequiredArgsConstructor
+public class PositionController {
+    private final PositionService positionService;
+
+    // 직무 생성
+    @PostMapping("/company/{companyId}/position")
+    public ResponseEntity<PositionCreatedResponse> createPosition(
+            @RequestBody PositionDto positionDto,
+            @PathVariable UUID companyId
+    ) {
+        PositionCreatedResponse createdPosition = positionService.createPosition(companyId, positionDto);
+        return ResponseEntity.ok(createdPosition);
+    }
+
+    @GetMapping("/company/{companyId}/position")
+    public List<PositionListDto> getAllPositionOfCompany(
+            @PathVariable UUID companyId
+    ) {
+        return positionService.getAllPositionOfCompany(companyId);
+    }
+
+    @GetMapping("/position/{positionId}")
+    public ResponseEntity<PositionDto> getPosition(
+            @PathVariable UUID positionId
+    ) {
+        PositionDto positionDto = positionService.getPosition(positionId);
+        return ResponseEntity.ok(positionDto);
+    }
+
+    // 직무 수정
+    @PutMapping("/position/{positionId}")
+    public ResponseEntity<PositionDto> updatePosition(
+            @PathVariable UUID positionId,
+            @RequestBody PositionDto positionDto) {
+        PositionDto updatedPosition = positionService.updatePosition(positionId, positionDto);
+        return ResponseEntity.ok(updatedPosition);
+    }
+
+    // 직무 삭제
+    @DeleteMapping("/position/{positionId}")
+    public ResponseEntity<Void> deletePosition(@PathVariable("positionId") UUID positionId) {
+        positionService.deletePosition(positionId);
+        return ResponseEntity.noContent().build();
+    }
+}

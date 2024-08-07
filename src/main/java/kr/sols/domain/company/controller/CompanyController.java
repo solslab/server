@@ -23,8 +23,6 @@ import static kr.sols.exception.ErrorCode.INVALID_INDUSTRY_TYPE;
 public class CompanyController {
 
     private final CompanyService companyService;
-    private final S3Service s3Service;
-
 
     // 기업 생성
     @PostMapping

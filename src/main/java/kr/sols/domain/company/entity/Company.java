@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import kr.sols.common.StringListConverter;
 import kr.sols.common.BaseTimeEntity;
 import kr.sols.common.TypeValidator;
+import kr.sols.domain.position.entity.Position;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
@@ -30,6 +31,9 @@ public class Company extends BaseTimeEntity {
     private List<String> industryType;
 
     private String companyLogo;
+
+    @OneToMany(mappedBy = "company")
+    private List<Position> positions;
 
     @Builder
     public Company(String companyName, List<String> industryType, String companyLogo) {

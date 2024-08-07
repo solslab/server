@@ -76,7 +76,8 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("index.html"),
                                 new AntPathRequestMatcher("/auth/success"),
                                 new AntPathRequestMatcher("/member/**"),
-                                new AntPathRequestMatcher("/company/**")
+                                new AntPathRequestMatcher("/company/**"),
+                                new AntPathRequestMatcher("/position/**")
                         ).permitAll()
 //                        .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).hasRole(Role.USER.name())
                         .anyRequest().authenticated()
