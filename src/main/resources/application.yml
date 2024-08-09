@@ -16,7 +16,7 @@ spring:
   data:
     redis:
       port: 6379
-      host: localhost
+      host: redis
   servlet:
     multipart:
       file-size-threshold: 2MB
@@ -33,9 +33,6 @@ cloud:
       auto: false
     stack:
       auto: false
-#    credentials:
-#      access-key: AKIAQKPIMGTOL26EKEGW
-#      secret-key: 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
 
 logging.level:
   org.springframework.boot.autoconfigure: ERROR
