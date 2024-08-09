@@ -45,10 +45,7 @@ public class TokenProvider {
     }
 
     public String generateAccessToken(Authentication authentication) {
-        System.out.println("generateAccessToken method called");
-        String token = generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
-        System.out.println(token);
-        return token;
+        return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
     }
 
     public void generateRefreshToken(Authentication authentication, String accessToken) {

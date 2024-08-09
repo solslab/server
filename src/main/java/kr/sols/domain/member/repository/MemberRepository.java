@@ -13,5 +13,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByMemberKey(String memberKey);
 
-    List<MemberListDto> findAllByOrderByCreatedDateDesc();
+    List<Member> findAllByOrderByCreatedDateDesc();
 }

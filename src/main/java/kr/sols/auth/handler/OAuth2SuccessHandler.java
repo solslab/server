@@ -19,8 +19,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     // TokenProvider 빈 주입
     private final TokenProvider tokenProvider;
 
-    // 인증 성공 후 리다이렉트할 URI
-    private static final String URI = "http://127.0.0.1:5500/auth-callback.html";
+    private static final String URI = "/auth/success";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,

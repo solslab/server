@@ -19,9 +19,6 @@ public class AuthController {
     // TokenService 빈 주입
     private final TokenService tokenService;
 
-    // RedisMessageService 빈 주입
-//    private final RedisMessageService redisMessageService;
-
     @GetMapping("/auth/success")
     public ResponseEntity<LoginResponse> loginSuccess(@Valid LoginResponse loginResponse) {
         // 로그인 성공 응답을 생성하여 반환

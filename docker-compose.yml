@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  sols-app:
+    image: gyujh630/sols-app:latest
+    container_name: sols-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - sols-redis
+    networks:
+      - sols
+
+  sols-redis:
+    image: redis:latest
+    container_name: sols-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - sols
+
+networks:
+  sols:
+    driver: bridge

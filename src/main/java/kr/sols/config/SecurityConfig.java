@@ -42,7 +42,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                 // error endpoint와 favicon.ico를 무시
-                .requestMatchers("/error", "/favicon.ico");
+                .requestMatchers("/error", "/favicon.ico", "/index.html");
     }
 
     // ⭐️ CORS 설정
@@ -73,7 +73,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 new AntPathRequestMatcher("/"),
-                                new AntPathRequestMatcher("index.html"),
                                 new AntPathRequestMatcher("/auth/success"),
                                 new AntPathRequestMatcher("/member/**"),
                                 new AntPathRequestMatcher("/company/**"),

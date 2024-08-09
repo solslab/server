@@ -33,9 +33,9 @@ cloud:
       auto: false
     stack:
       auto: false
-    credentials:
-      access-key: ${AWS_ACCESS}
-      secret-key: ${AWS_SECRET}
+#    credentials:
+#      access-key: AKIAQKPIMGTOL26EKEGW
+#      secret-key: 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
 
 logging.level:
   org.springframework.boot.autoconfigure: ERROR

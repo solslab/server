@@ -1,6 +1,7 @@
 package kr.sols.domain.member.service;
 import static kr.sols.exception.ErrorCode.MEMBER_NOT_FOUND;
 
+import kr.sols.domain.company.dto.CompanyListDto;
 import kr.sols.domain.member.exception.MemberException;
 import kr.sols.domain.member.repository.MemberRepository;
 import kr.sols.domain.member.entity.Member;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class MemberService {
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true)
     public MemberDto memberInfo(String memberKey) {
         Member member = findByMemberKeyOrThrow(memberKey);
         return MemberDto.fromEntity(member);
@@ -32,12 +34,17 @@ public class MemberService {
         return MemberDto.fromEntity(member);
     }
 
+    @Transactional(readOnly = true)
     public Member findByMemberKeyOrThrow(String memberKey) {
         return memberRepository.findByMemberKey(memberKey)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public List<MemberListDto> getAllMember() {
-        return memberRepository.findAllByOrderByCreatedDateDesc();
+        List<Member> members = memberRepository.findAllByOrderByCreatedDateDesc();
+        return members.stream()
+                .map(MemberListDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }
