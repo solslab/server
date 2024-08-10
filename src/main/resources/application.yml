@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${spring.datasource.url}
-    username: root
+    username: ${spring.datasource.username}
     password: ${spring.datasource.password}
   jpa:
     database: mysql
@@ -16,7 +16,7 @@ spring:
   data:
     redis:
       port: 6379
-      host: redis
+      host: localhost  # docker 배포 시 -> redis로 변경해야함
   servlet:
     multipart:
       file-size-threshold: 2MB
