@@ -18,7 +18,7 @@ public class MemberDto {
     private String email;
     private Integer memberTier;
     private List<String> preferLanguages;
-    private List<String> preferPositions;
+//    private List<String> preferPositions;
     private List<String> preferIndustries;
     private SocialType socialType;
 
@@ -29,7 +29,7 @@ public class MemberDto {
                 .email(member.getEmail())
                 .memberTier(member.getMemberTier())
                 .preferLanguages(member.getPreferLanguages())
-                .preferPositions(member.getPreferPositions())
+//                .preferPositions(member.getPreferPositions())
                 .preferIndustries(member.getPreferIndustries())
                 .socialType(member.getSocialType())
                 .build();

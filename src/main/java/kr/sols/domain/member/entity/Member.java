@@ -39,8 +39,8 @@ public class Member extends BaseTimeEntity {
     @Max(36)
     private Integer memberTier;
 
-    @Convert(converter = StringListConverter.class)
-    private List<String> preferPositions;
+//    @Convert(converter = StringListConverter.class)
+//    private List<String> preferPositions;
 
     @Convert(converter = StringListConverter.class)
     private List<String> preferIndustries;
@@ -55,13 +55,13 @@ public class Member extends BaseTimeEntity {
 
 
     @Builder
-    public Member(String name, String email, SocialType socialType, List<String> preferLanguages, Integer memberTier, List<String> preferPositions, List<String> preferIndustries, String memberKey, Role role) {
+    public Member(String name, String email, SocialType socialType, List<String> preferLanguages, Integer memberTier, List<String> preferIndustries, String memberKey, Role role) {
         this.name = name;
         this.email = email;
         this.socialType = socialType;
         this.memberTier = memberTier;
         this.preferLanguages = preferLanguages;
-        this.preferPositions = preferPositions;
+//        this.preferPositions = preferPositions;
         this.preferIndustries = preferIndustries;
         this.memberKey = memberKey;
         this.role = role;
@@ -74,9 +74,9 @@ public class Member extends BaseTimeEntity {
         if (request.getPreferLanguages() != null) {
             this.preferLanguages = request.getPreferLanguages();
         }
-        if (request.getPreferPositions() != null) {
-            this.preferPositions = request.getPreferPositions();
-        }
+//        if (request.getPreferPositions() != null) {
+//            this.preferPositions = request.getPreferPositions();
+//        }
         if (request.getPreferIndustries() != null) {
             this.preferIndustries = request.getPreferIndustries();
         }

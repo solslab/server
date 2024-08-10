@@ -29,8 +29,6 @@ public class AuthController {
     public ResponseEntity<Void> logout(@AuthenticationPrincipal UserDetails userDetails) {
         // 리프레시 토큰 삭제
         tokenService.deleteRefreshToken(userDetails.getUsername());
-       // Redis 구독 해제
-//        redisMessageService.removeSubscribe(userDetails.getUsername());
 
         // 로그아웃 성공 응답 반환 (204 No Content)
         return ResponseEntity.noContent().build();

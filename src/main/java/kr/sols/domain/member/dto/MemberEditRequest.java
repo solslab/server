@@ -9,6 +9,6 @@ import java.util.List;
 public class MemberEditRequest {
     private Integer memberTier;
     private List<String> preferLanguages;
-    private List<String> preferPositions;
+//    private List<String> preferPositions;
     private List<String> preferIndustries;
 }

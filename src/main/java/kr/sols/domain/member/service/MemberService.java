@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -25,6 +27,22 @@ public class MemberService {
     public MemberDto memberInfo(String memberKey) {
         Member member = findByMemberKeyOrThrow(memberKey);
         return MemberDto.fromEntity(member);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, String> additionalInfoCheck(String memberKey) {
+        Member member = findByMemberKeyOrThrow(memberKey);
+        Map<String, String> response = new HashMap<>();
+
+        if (member.getMemberTier() == null ||
+                member.getPreferIndustries() == null ||
+                member.getPreferLanguages() == null) {
+            response.put("status", "incomplete");
+        } else {
+            response.put("status", "complete");
+        }
+
+        return response;
     }
 
     @Transactional

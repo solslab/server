@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/member")
 @RequiredArgsConstructor
@@ -27,6 +28,20 @@ public class MemberController {
             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(memberService.memberInfo(userDetails.getUsername()));
     }
+
+    // 추가정보 입력여부 확인
+    @RoleUser
+    @GetMapping("/info-check")
+    public ResponseEntity<Map<String, String>> additionalInfoCheck(
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        String memberKey = userDetails.getUsername();
+        Map<String, String> response = memberService.additionalInfoCheck(memberKey);
+
+        return ResponseEntity.ok(response);
+    }
+
+
 
     // 회원가입 추가정보 입력 및 회원수정
     @RoleUser
