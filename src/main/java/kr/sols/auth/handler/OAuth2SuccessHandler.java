@@ -19,7 +19,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     // TokenProvider 빈 주입
     private final TokenProvider tokenProvider;
 
-    private static final String URI = "http://localhost:3001/login/success";
+    private static final String URI = "http://localhost:3001/api/login/success";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
