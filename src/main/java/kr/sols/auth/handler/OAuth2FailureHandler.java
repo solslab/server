@@ -12,7 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Slf4j
 public class OAuth2FailureHandler implements AuthenticationFailureHandler {
 
-    private static final String URI = "http://localhost:3001/login/fail";
+    private static final String URI = "http://localhost:3001/api/login/fail";
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
