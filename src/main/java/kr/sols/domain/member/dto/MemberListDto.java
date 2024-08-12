@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter
@@ -18,6 +20,7 @@ public class MemberListDto {
     private String name;
     private String email;
     private SocialType socialType;
+    private String createdDate;
 
     public static MemberListDto fromEntity(Member member) {
         return MemberListDto.builder()
@@ -25,6 +28,15 @@ public class MemberListDto {
                 .name(member.getName())
                 .email(member.getEmail())
                 .socialType(member.getSocialType())
+                .createdDate(formatDate(member.getCreatedDate()))
                 .build();
+    }
+
+    private static String formatDate(LocalDateTime date) {
+        if (date == null) {
+            return null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(formatter);
     }
 }

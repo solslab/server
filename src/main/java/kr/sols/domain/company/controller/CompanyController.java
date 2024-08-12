@@ -1,5 +1,6 @@
 package kr.sols.domain.company.controller;
 
+import kr.sols.auth.annotation.RoleAdmin;
 import kr.sols.common.TypeValidator;
 import kr.sols.domain.company.dto.*;
 import kr.sols.domain.company.exception.CompanyException;
@@ -25,6 +26,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     // 기업 생성
+    @RoleAdmin
     @PostMapping
     public ResponseEntity<CompanyIdDto> createCompany(@RequestBody CompanyRequestDto companyRequestDto) {
         // 검증 로직
@@ -44,6 +46,7 @@ public class CompanyController {
     }
 
     // 기업 수정
+    @RoleAdmin
     @PutMapping("/{id}")
     public ResponseEntity<CompanyDetailDto> updateCompany(@PathVariable UUID id, @RequestBody CompanyRequestDto companyRequestDto) {
         CompanyDetailDto updatedCompany = companyService.updateCompany(id, companyRequestDto);
@@ -51,6 +54,7 @@ public class CompanyController {
     }
 
     // 기업 삭제
+    @RoleAdmin
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable UUID id) {
         companyService.deleteCompany(id);
@@ -58,6 +62,7 @@ public class CompanyController {
     }
 
     // 기업 로고 생성(변경)
+    @RoleAdmin
     @PostMapping(path = "/{id}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CompanyLogoDto> uploadCompanyLogo(@PathVariable UUID id,
                                                             @RequestPart(value = "fileName") String fileName,
@@ -67,6 +72,7 @@ public class CompanyController {
     }
 
     // 기업 로고 삭제
+    @RoleAdmin
     @DeleteMapping("/{id}/logo")
     public ResponseEntity<Void> deleteCompanyLogo(@PathVariable UUID id) {
         companyService.deleteCompanyLogo(id);

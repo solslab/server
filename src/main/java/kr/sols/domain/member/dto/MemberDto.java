@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -21,6 +23,7 @@ public class MemberDto {
 //    private List<String> preferPositions;
     private List<String> preferIndustries;
     private SocialType socialType;
+    private String createdDate;
 
     public static MemberDto fromEntity(Member member) {
         MemberDto memberDto = MemberDto.builder()
@@ -32,8 +35,17 @@ public class MemberDto {
 //                .preferPositions(member.getPreferPositions())
                 .preferIndustries(member.getPreferIndustries())
                 .socialType(member.getSocialType())
+                .createdDate(formatDate(member.getCreatedDate()))
                 .build();
 
         return memberDto;
+    }
+
+    private static String formatDate(LocalDateTime date) {
+        if (date == null) {
+            return null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(formatter);
     }
 }

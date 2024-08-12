@@ -26,7 +26,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException, ServletException {
         // 액세스 토큰 생성
         String accessToken = tokenProvider.generateAccessToken(authentication);
-        System.out.println(accessToken);
+
         // 리프레시 토큰 생성
         tokenProvider.generateRefreshToken(authentication, accessToken);
 

@@ -1,5 +1,6 @@
 package kr.sols.domain.member.controller;
 import jakarta.validation.Valid;
+import kr.sols.auth.annotation.RoleAdmin;
 import kr.sols.auth.annotation.RoleUser;
 import kr.sols.domain.member.dto.MemberDto;
 import kr.sols.domain.member.dto.MemberEditRequest;
@@ -41,8 +42,6 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-
-
     // 회원가입 추가정보 입력 및 회원수정
     @RoleUser
     @PutMapping
@@ -53,13 +52,15 @@ public class MemberController {
         return ResponseEntity.ok(memberService.memberEdit(request, userDetails.getUsername()));
     }
 
-    // 모든 회원 조회 (관리자)
+    // 모든 회원 조회
+    @RoleAdmin
     @GetMapping("/list")
     public List<MemberListDto> getMemberList() {
         return memberService.getAllMember();
     }
 
-    // 회원 상세 조회 (관리자)
+    // 회원 상세 조회
+    @RoleAdmin
     @GetMapping("/{memberKey}")
     public ResponseEntity<MemberDto> getMember(
             @PathVariable String memberKey

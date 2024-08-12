@@ -7,12 +7,16 @@ import kr.sols.domain.admin.repository.AdminRepository;
 import kr.sols.domain.member.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+
+import java.util.Collections;
 
 import static kr.sols.exception.ErrorCode.*;
 
@@ -25,22 +29,18 @@ public class AdminService {
     private final TokenProvider tokenProvider;
 
     public Admin createAdmin(String email, String password) {
-        // 이메일 중복 체크
         adminRepository.findByEmail(email).ifPresent(a -> {
             throw new AdminException(DUPLICATED_ADMIN_NAME);
         });
 
-        // 패스워드 암호화
         String encodedPassword = passwordEncoder.encode(password);
 
-        // 어드민 엔티티 생성
         Admin admin = Admin.builder()
                 .email(email)
                 .password(encodedPassword)
-                .role(Role.ADMIN) // 어드민 권한 부여
+                .role(Role.ADMIN)
                 .build();
 
-        // DB에 저장
         return adminRepository.save(admin);
     }
 
@@ -52,7 +52,13 @@ public class AdminService {
             throw new AdminException(ADMIN_PW_INCORRECT);
         }
 
-        Authentication authentication = tokenProvider.getAuthentication(email);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                admin.getEmail(), // 사용자 이름
+                null, // 비밀번호는 필요 없으므로 null
+                Collections.singletonList(new SimpleGrantedAuthority(admin.getRole().getKey()))
+        );
+
+        // 토큰 생성
         String accessToken = tokenProvider.generateAccessToken(authentication);
         tokenProvider.generateRefreshToken(authentication, accessToken);
 

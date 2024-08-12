@@ -1,5 +1,7 @@
 package kr.sols.domain.position.controller;
 
+import kr.sols.auth.annotation.RoleAdmin;
+import kr.sols.auth.annotation.RoleUser;
 import kr.sols.domain.position.dto.PositionCreatedResponse;
 import kr.sols.domain.position.dto.PositionDto;
 import kr.sols.domain.position.dto.PositionListDto;
@@ -17,6 +19,7 @@ public class PositionController {
     private final PositionService positionService;
 
     // 직무 생성
+    @RoleAdmin
     @PostMapping("/company/{companyId}/position")
     public ResponseEntity<PositionCreatedResponse> createPosition(
             @RequestBody PositionDto positionDto,
@@ -26,6 +29,7 @@ public class PositionController {
         return ResponseEntity.ok(createdPosition);
     }
 
+    // 특정 기업의 직무 조회
     @GetMapping("/company/{companyId}/position")
     public List<PositionListDto> getAllPositionOfCompany(
             @PathVariable UUID companyId
@@ -33,6 +37,7 @@ public class PositionController {
         return positionService.getAllPositionOfCompany(companyId);
     }
 
+    // 직무 상세조회
     @GetMapping("/position/{positionId}")
     public ResponseEntity<PositionDto> getPosition(
             @PathVariable UUID positionId
@@ -42,6 +47,7 @@ public class PositionController {
     }
 
     // 직무 수정
+    @RoleAdmin
     @PutMapping("/position/{positionId}")
     public ResponseEntity<PositionDto> updatePosition(
             @PathVariable UUID positionId,
@@ -51,6 +57,7 @@ public class PositionController {
     }
 
     // 직무 삭제
+    @RoleAdmin
     @DeleteMapping("/position/{positionId}")
     public ResponseEntity<Void> deletePosition(@PathVariable("positionId") UUID positionId) {
         positionService.deletePosition(positionId);
