@@ -83,7 +83,8 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/auth/success"),
                                 new AntPathRequestMatcher("/member/**"),
                                 new AntPathRequestMatcher("/company/**"),
-                                new AntPathRequestMatcher("/position/**")
+                                new AntPathRequestMatcher("/position/**"),
+                                new AntPathRequestMatcher("/admin/**")
                         ).permitAll()
 //                        .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).hasRole(Role.USER.name())
                         .anyRequest().authenticated()

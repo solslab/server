@@ -15,7 +15,8 @@ public enum ErrorCode {
     INVALID_JWT_SIGNATURE(UNAUTHORIZED, "잘못된 JWT 시그니처입니다."),
 
     // admin
-    ADMIN_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다."),
+    ADMIN_NOT_FOUND(NOT_FOUND, "일치하는 관리자 계정이 없습니다."),
+    ADMIN_PW_INCORRECT(UNAUTHORIZED,"관리자 비밀번호가 일치하지 않습니다."),
     DUPLICATED_ADMIN_NAME(CONFLICT, "이미 등록된 이메일입니다."),
 
     // member
