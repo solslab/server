@@ -14,6 +14,10 @@ public enum ErrorCode {
     INVALID_TOKEN(UNAUTHORIZED, "올바르지 않은 토큰입니다."),
     INVALID_JWT_SIGNATURE(UNAUTHORIZED, "잘못된 JWT 시그니처입니다."),
 
+    // admin
+    ADMIN_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다."),
+    DUPLICATED_ADMIN_NAME(CONFLICT, "이미 등록된 이메일입니다."),
+
     // member
     MEMBER_NOT_FOUND(NOT_FOUND, "회원을 찾을 수 없습니다."),
 
