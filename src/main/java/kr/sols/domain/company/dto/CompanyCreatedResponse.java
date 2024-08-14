@@ -7,13 +7,13 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class CompanyIdDto {
+public class CompanyCreatedResponse {
     private UUID companyId;
 
-    public CompanyIdDto() {
+    public CompanyCreatedResponse() {
     }
 
-    public CompanyIdDto(UUID companyId) {
+    public CompanyCreatedResponse(UUID companyId) {
         this.companyId = companyId;
     }
 }

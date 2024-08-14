@@ -4,6 +4,8 @@ import kr.sols.domain.company.dto.*;
 import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.repository.CompanyRepository;
+import kr.sols.domain.position.dto.PositionListDto;
+import kr.sols.domain.position.service.PositionService;
 import kr.sols.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static kr.sols.exception.ErrorCode.COMPANY_NOT_FOUND;
@@ -24,9 +25,10 @@ import static kr.sols.exception.ErrorCode.DUPLICATED_COMPANY_NAME;
 public class CompanyService {
     private final S3Service s3Service;
     private final CompanyRepository companyRepository;
+    private final PositionService positionService;
 
     @Transactional
-    public CompanyIdDto createCompany(CompanyRequestDto companyRequestDto) {
+    public CompanyCreatedResponse createCompany(CompanyRequestDto companyRequestDto) {
         if (companyRepository.existsByCompanyName(companyRequestDto.getCompanyName())) {
             throw new CompanyException(DUPLICATED_COMPANY_NAME);
         }
@@ -36,7 +38,7 @@ public class CompanyService {
                 .build();
 
         Company savedCompany = companyRepository.save(company);
-        return new CompanyIdDto(savedCompany.getId());
+        return new CompanyCreatedResponse(savedCompany.getId());
     }
 
     @Transactional(readOnly = true)
@@ -49,18 +51,20 @@ public class CompanyService {
 
     @Transactional(readOnly = true)
     public CompanyDetailDto getCompany(UUID id) {
-        Optional<Company> company = companyRepository.findById(id);
-        return company.map(CompanyDetailDto::fromEntity).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
+        Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
+        List<PositionListDto> positions = positionService.getAllPositionOfCompany(id);
+
+        return CompanyDetailDto.fromEntity(company, positions);
     }
 
     @Transactional
-    public CompanyDetailDto updateCompany(UUID id, CompanyRequestDto companyRequestDto) {
+    public CompanyCreatedResponse updateCompany(UUID id, CompanyRequestDto companyRequestDto) {
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
         company.setCompanyName(companyRequestDto.getCompanyName());
         company.setIndustryType(companyRequestDto.getIndustryType());
 
         Company updatedCompany = companyRepository.save(company);
-        return CompanyDetailDto.fromEntity(updatedCompany);
+        return new CompanyCreatedResponse(updatedCompany.getId());
     }
 
     @Transactional

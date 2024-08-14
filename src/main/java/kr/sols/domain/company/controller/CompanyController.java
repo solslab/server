@@ -5,7 +5,6 @@ import kr.sols.common.TypeValidator;
 import kr.sols.domain.company.dto.*;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.service.CompanyService;
-import kr.sols.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +27,14 @@ public class CompanyController {
     // 기업 생성
     @RoleAdmin
     @PostMapping
-    public ResponseEntity<CompanyIdDto> createCompany(@RequestBody CompanyRequestDto companyRequestDto) {
+    public ResponseEntity<CompanyCreatedResponse> createCompany(@RequestBody CompanyRequestDto companyRequestDto) {
         // 검증 로직
         if (!TypeValidator.isValidIndustryTypeList(companyRequestDto.getIndustryType())) {
             throw new CompanyException(INVALID_INDUSTRY_TYPE);
         }
 
         // 회사 생성 로직
-        CompanyIdDto createdCompany = companyService.createCompany(companyRequestDto);
+        CompanyCreatedResponse createdCompany = companyService.createCompany(companyRequestDto);
         return ResponseEntity.ok(createdCompany);
     }
 
@@ -48,8 +47,8 @@ public class CompanyController {
     // 기업 수정
     @RoleAdmin
     @PutMapping("/{id}")
-    public ResponseEntity<CompanyDetailDto> updateCompany(@PathVariable UUID id, @RequestBody CompanyRequestDto companyRequestDto) {
-        CompanyDetailDto updatedCompany = companyService.updateCompany(id, companyRequestDto);
+    public ResponseEntity<CompanyCreatedResponse> updateCompany(@PathVariable UUID id, @RequestBody CompanyRequestDto companyRequestDto) {
+        CompanyCreatedResponse updatedCompany = companyService.updateCompany(id, companyRequestDto);
         return ResponseEntity.ok(updatedCompany);
     }
 
