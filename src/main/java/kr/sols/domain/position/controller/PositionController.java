@@ -5,6 +5,7 @@ import kr.sols.auth.annotation.RoleUser;
 import kr.sols.domain.position.dto.PositionCreatedResponse;
 import kr.sols.domain.position.dto.PositionDto;
 import kr.sols.domain.position.dto.PositionListDto;
+import kr.sols.domain.position.dto.PositionTabDto;
 import kr.sols.domain.position.service.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,12 +36,12 @@ public class PositionController {
     }
 
     // 특정 기업의 직무 조회
-    @GetMapping("/company/{companyId}/position")
-    public List<PositionListDto> getAllPositionOfCompany(
-            @PathVariable UUID companyId
-    ) {
-        return positionService.getAllPositionOfCompany(companyId);
-    }
+//    @GetMapping("/company/{companyId}/position")
+//    public List<PositionListDto> getAllPositionOfCompany(
+//            @PathVariable UUID companyId
+//    ) {
+//        return positionService.getAllPositionOfCompany(companyId);
+//    }
 
     // 직무 상세조회
     @RoleAdmin
@@ -66,32 +68,21 @@ public class PositionController {
         positionService.deletePosition(positionId);
         return ResponseEntity.noContent().build();
     }
-//
-//    @GetMapping("/position/info/{positionId}")
-//    public ResponseEntity<PositionDto> getPositionInfo(@PathVariable("positionId") UUID positionId) {
-//        PositionDto positionDto = positionService.getPosition(positionId);
-//        return ResponseEntity.ok(positionDto);
-//    }
 
-    @GetMapping("position/info/{positionId}")
-    public ResponseEntity<?> getPositionInfo(@PathVariable("positionId") UUID positionId) {
-        // 현재 인증 상태 확인
+    // 기업 탭 - 직무별 코테정보 조회
+    @GetMapping("tab/testinfo/{positionId}")
+    public ResponseEntity<PositionTabDto> getPositionInfo(@PathVariable("positionId") UUID positionId) {
+        // 인증 상태 확인
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isMember = authentication != null && authentication.isAuthenticated();
 
-        if (authentication == null || !authentication.isAuthenticated()) {
-            // 인증되지 않은 상태에서 응답
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("You need to be authenticated to access this resource.");
+        PositionDto positionDto = positionService.getPosition(positionId);
+        PositionTabDto positionTabDto = PositionTabDto.fromDto(positionDto, isMember);
+
+        if (!isMember) {
+            positionTabDto.setSupportLanguages(new ArrayList<>()); // 비회원인 경우 지원언어 숨기기
         }
 
-        // 인증된 상태에서의 처리
-        try {
-            PositionDto positionDto = positionService.getPosition(positionId);
-            return ResponseEntity.ok(positionDto);
-        } catch (Exception e) {
-            // 예외 발생 시 처리
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while processing your request.");
-        }
+        return ResponseEntity.ok(positionTabDto);
     }
 }

@@ -34,10 +34,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         } else {
             // 토큰이 유효하지 않다면, 리프레시 토큰으로 새로운 액세스 토큰을 발급
             if (isPathExcluded(requestURI) && accessToken == null) { // 패스해도 되는 url + 토큰 없는 경우
+                System.out.println("통과 로직");
                 filterChain.doFilter(request, response); // 그냥 통과
             }
             else {
                 String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken); // 여기서 exception 발생
+                System.out.println("통과x 로직");
                 if (StringUtils.hasText(reissueAccessToken)) {
                     // 새로운 액세스 토큰으로 인증 정보 설정
                     setAuthentication(reissueAccessToken);
@@ -64,7 +66,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean isPathExcluded(String requestURI) {
         // 특정 URL 패턴을 패스하도록 설정
-        return requestURI.startsWith("/position/info");
+        return requestURI.startsWith("/tab/testinfo");
     }
 }
 
