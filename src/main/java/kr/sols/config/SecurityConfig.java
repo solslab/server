@@ -82,8 +82,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/auth/success"),
-                                new AntPathRequestMatcher("/company/**", "GET")
-//                                new AntPathRequestMatcher("/position/**")
+                                new AntPathRequestMatcher("/company/**", "GET"),
+                                new AntPathRequestMatcher("/position/**"),
+                                new AntPathRequestMatcher("/admin/login")
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
