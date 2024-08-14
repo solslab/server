@@ -36,6 +36,7 @@ public class S3Service{
 
     public String upload(String fileName, MultipartFile multipartFile, String extend) throws IOException { // dirName의 디렉토리가 S3 Bucket 내부에 생성됨
 
+        System.out.println("dngkgk"+multipartFile);
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new S3Exception(FAIL_TO_CONVERT_FILE));
         return upload(fileName, uploadFile, extend);
@@ -65,7 +66,6 @@ public class S3Service{
     }
 
     private Optional<File> convert(MultipartFile file) throws IOException {
-        log.info(file.getOriginalFilename());
         File convertFile = new File(file.getOriginalFilename()); // 업로드한 파일의 이름
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {

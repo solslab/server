@@ -1,5 +1,6 @@
 package kr.sols.config;
 
+import com.amazonaws.HttpMethod;
 import kr.sols.auth.handler.CustomAccessDeniedHandler;
 import kr.sols.auth.handler.CustomAuthenticationEntryPoint;
 import kr.sols.auth.handler.OAuth2FailureHandler;
@@ -81,12 +82,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/auth/success"),
-                                new AntPathRequestMatcher("/member/**"),
-                                new AntPathRequestMatcher("/company/**"),
-                                new AntPathRequestMatcher("/position/**"),
-                                new AntPathRequestMatcher("/admin/**")
+                                new AntPathRequestMatcher("/company/**", "GET")
+//                                new AntPathRequestMatcher("/position/**")
                         ).permitAll()
-//                        .requestMatchers(new AntPathRequestMatcher("/api/v1/**")).hasRole(Role.USER.name())
                         .anyRequest().authenticated()
                 )
 
