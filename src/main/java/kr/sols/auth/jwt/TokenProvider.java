@@ -1,7 +1,5 @@
 package kr.sols.auth.jwt;
 
-import static kr.sols.exception.ErrorCode.INVALID_JWT_SIGNATURE;
-import static kr.sols.exception.ErrorCode.INVALID_TOKEN;
 import kr.sols.auth.exception.TokenException;
 import kr.sols.auth.service.TokenService;
 import kr.sols.redis.Token;
@@ -26,6 +24,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import static kr.sols.exception.ErrorCode.*;
 
 @RequiredArgsConstructor
 @Component
@@ -95,6 +95,9 @@ public class TokenProvider {
                 String reissueAccessToken = generateAccessToken(getAuthentication(refreshToken));
                 tokenService.updateToken(reissueAccessToken, token);
                 return reissueAccessToken;
+            }
+            else {
+                throw new TokenException(TOKEN_EXPIRED);
             }
         }
         return null;
