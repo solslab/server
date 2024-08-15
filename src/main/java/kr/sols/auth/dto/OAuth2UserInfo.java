@@ -2,6 +2,7 @@ package kr.sols.auth.dto;
 import static kr.sols.exception.ErrorCode.ILLEGAL_REGISTRATION_ID;
 import kr.sols.auth.exception.AuthException;
 import kr.sols.common.KeyGenerator;
+import kr.sols.common.NickNameGenerator;
 import kr.sols.domain.member.entity.Member;
 import kr.sols.domain.member.entity.Role;
 import java.util.Map;
@@ -50,6 +51,7 @@ public record OAuth2UserInfo(
 
         return Member.builder()
                 .name(name)
+                .nickname(NickNameGenerator.generateRandomNickname())
                 .email(email)
                 .socialType(socialType)
                 .memberKey(KeyGenerator.generateKey())
