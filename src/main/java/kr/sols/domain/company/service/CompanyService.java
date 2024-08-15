@@ -5,6 +5,7 @@ import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.repository.CompanyRepository;
 import kr.sols.domain.position.dto.PositionListDto;
+import kr.sols.domain.position.repository.PositionRepository;
 import kr.sols.domain.position.service.PositionService;
 import kr.sols.s3.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class CompanyService {
     private final S3Service s3Service;
     private final CompanyRepository companyRepository;
     private final PositionService positionService;
+    private final PositionRepository positionRepository;
 
     @Transactional
     public CompanyCreatedResponse createCompany(CompanyRequestDto companyRequestDto) {
@@ -71,6 +73,9 @@ public class CompanyService {
     public void deleteCompany(UUID id) {
         // 404 처리
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
+
+        // 직무가 있다면 삭제
+        positionRepository.deleteAllByCompanyId(id);
 
         // 로고가 있다면 S3에서 삭제
         if (company.getCompanyLogo() != null) {
