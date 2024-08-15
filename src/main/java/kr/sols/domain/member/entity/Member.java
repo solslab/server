@@ -26,6 +26,9 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false, length = 10)
     private String name;
 
+    @Column(nullable = false, length = 10)
+    private String nickname;
+
     @Column(nullable = false, length = 20, unique = true)
     private String email;
 
@@ -55,8 +58,9 @@ public class Member extends BaseTimeEntity {
 
 
     @Builder
-    public Member(String name, String email, SocialType socialType, List<String> preferLanguages, Integer memberTier, List<String> preferIndustries, String memberKey, Role role) {
+    public Member(String name, String nickname, String email, SocialType socialType, List<String> preferLanguages, Integer memberTier, List<String> preferIndustries, String memberKey, Role role) {
         this.name = name;
+        this.nickname = nickname;
         this.email = email;
         this.socialType = socialType;
         this.memberTier = memberTier;
@@ -68,6 +72,9 @@ public class Member extends BaseTimeEntity {
     }
 
     public void updateMember(MemberEditRequest request) {
+        if (request.getNickname() != null) {
+            this.nickname = request.getNickname();
+        }
         if (request.getMemberTier() != null) {
             this.memberTier = request.getMemberTier();
         }

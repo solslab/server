@@ -7,6 +7,7 @@ import java.util.List;
 @Getter
 @Setter
 public class MemberEditRequest {
+    private String nickname;
     private Integer memberTier;
     private List<String> preferLanguages;
 //    private List<String> preferPositions;

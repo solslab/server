@@ -17,6 +17,7 @@ import java.util.List;
 public class MemberDto {
 //    private String memberKey;
     private String name;
+    private String nickname;
     private String email;
     private Integer memberTier;
     private List<String> preferLanguages;
@@ -27,8 +28,8 @@ public class MemberDto {
 
     public static MemberDto fromEntity(Member member) {
         MemberDto memberDto = MemberDto.builder()
-//                .memberKey(member.getMemberKey())
                 .name(member.getName())
+                .nickname(member.getNickname())
                 .email(member.getEmail())
                 .memberTier(member.getMemberTier())
                 .preferLanguages(member.getPreferLanguages())

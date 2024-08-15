@@ -16,7 +16,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         // 인증 예외
         String requestURI = request.getRequestURI();
         if (isPathExcluded(requestURI)) {
-            response.setStatus(HttpServletResponse.SC_OK); // 인증 실패 시 OK 상태 반환
+            response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
 
