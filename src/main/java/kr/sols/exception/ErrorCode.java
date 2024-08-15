@@ -33,6 +33,9 @@ public enum ErrorCode {
     INVALID_LANGUAGE_TYPE(BAD_REQUEST, "등록되지 않은 프로그래밍 언어 값입니다."),
     INVALID_EXAM_MODE_TYPE(BAD_REQUEST, "등록되지 않은 시험방식(대면, 비대면) 값입니다."),
 
+    // test_review
+    TEST_REVIEW_NOT_FOUND(NOT_FOUND, "코테 후기를 찾을 수 없습니다."),
+    MEMBER_TIER_UNDEFINED(BAD_REQUEST, "회원의 티어 설정이 되지 않았습니다."),
 
     // S3
     FAIL_TO_CONVERT_FILE(BAD_REQUEST, "MultipartFile을 File로 전환하는데 실패했습니다."),

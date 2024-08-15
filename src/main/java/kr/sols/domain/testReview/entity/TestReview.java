@@ -21,7 +21,7 @@ public class TestReview extends BaseTimeEntity {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    private UUID memberKey; // 반정규화
+    private String memberKey; // 반정규화
     private UUID companyId; // 반정규화
 
     @NotNull(message = "회원 티어를 입력해주세요.")
@@ -68,7 +68,7 @@ public class TestReview extends BaseTimeEntity {
 
 
     @Builder
-    public TestReview (UUID id, UUID memberKey, UUID companyId, int memberTier, int trYear, String trPosition, String trCareer, int trProblemNum, int trSolvedNum, String trPassStatus, List<String> trProblemType, String trComment) {
+    public TestReview (UUID id, String memberKey, UUID companyId, int memberTier, int trYear, String trPosition, String trCareer, int trProblemNum, int trSolvedNum, String trPassStatus, List<String> trProblemType, String trComment) {
         this.id = id;
         this.memberKey = memberKey;
         this.companyId = companyId;
@@ -82,7 +82,4 @@ public class TestReview extends BaseTimeEntity {
         this.trProblemType = trProblemType;
         this.trComment = trComment;
     }
-
-
-
 }
