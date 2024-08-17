@@ -7,10 +7,7 @@ import kr.sols.common.StringListConverter;
 import kr.sols.domain.member.dto.MemberEditRequest;
 import kr.sols.common.BaseTimeEntity;
 //import jakarta.persistence.Embedded;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -56,9 +53,13 @@ public class Member extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @Setter
+    @Column(nullable = false, unique = true)
+    private String tid;
+
 
     @Builder
-    public Member(String name, String nickname, String email, SocialType socialType, List<String> preferLanguages, Integer memberTier, List<String> preferIndustries, String memberKey, Role role) {
+    public Member(String name, String nickname, String email, SocialType socialType, List<String> preferLanguages, Integer memberTier, List<String> preferIndustries, String memberKey, Role role, String tid) {
         this.name = name;
         this.nickname = nickname;
         this.email = email;
@@ -69,6 +70,7 @@ public class Member extends BaseTimeEntity {
         this.preferIndustries = preferIndustries;
         this.memberKey = memberKey;
         this.role = role;
+        this.tid = tid;
     }
 
     public void updateMember(MemberEditRequest request) {

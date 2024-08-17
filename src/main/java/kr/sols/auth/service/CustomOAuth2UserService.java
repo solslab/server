@@ -5,6 +5,7 @@ import kr.sols.auth.dto.model.PrincipalDetails;
 import kr.sols.domain.member.entity.Member;
 import kr.sols.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -35,15 +36,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuth2UserAttributes);
 
         // 5. 회원가입 및 로그인
-        Member member = getOrSave(oAuth2UserInfo, registrationId);
+        String tid = String.valueOf(oAuth2UserAttributes.get("id")); // tid 세팅
+        Member member = getOrSave(oAuth2UserInfo, registrationId, tid);
 
         // 6. OAuth2User로 반환
         return new PrincipalDetails(member, oAuth2UserAttributes, userNameAttributeName);
     }
 
-    private Member getOrSave(OAuth2UserInfo oAuth2UserInfo, String registrationId) {
+    private Member getOrSave(OAuth2UserInfo oAuth2UserInfo, String registrationId, String tid) {
         Member member = memberRepository.findByEmail(oAuth2UserInfo.email())
-                .orElseGet(() -> oAuth2UserInfo.toEntity(registrationId));
+                .orElseGet(() -> oAuth2UserInfo.toEntity(registrationId, tid));
         return memberRepository.save(member);
     }
 }

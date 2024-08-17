@@ -1,7 +1,6 @@
 package kr.sols.domain.member.service;
 import static kr.sols.exception.ErrorCode.MEMBER_NOT_FOUND;
 
-import kr.sols.domain.company.dto.CompanyListDto;
 import kr.sols.domain.member.exception.MemberException;
 import kr.sols.domain.member.repository.MemberRepository;
 import kr.sols.domain.member.entity.Member;
@@ -9,8 +8,13 @@ import kr.sols.domain.member.dto.MemberDto;
 import kr.sols.domain.member.dto.MemberEditRequest;
 import kr.sols.domain.member.dto.MemberListDto;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +25,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
+    @Value("${KAKAO_ADMIN}") // 카카오 Admin Key를 application.properties 또는 application.yml에 설정해두세요.
+    private String kakaoAdminKey;
+    private final WebClient webClient;
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
@@ -64,5 +71,32 @@ public class MemberService {
         return members.stream()
                 .map(MemberListDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteMember(String memberKey) {
+        Member targetMember = memberRepository.findByMemberKey(memberKey)
+                .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+        String tid = targetMember.getTid();
+
+        // 카카오 계정 연결 끊기
+        unlinkKakaoAccount(tid);
+
+        // DB에서 삭제
+        memberRepository.deleteByMemberKey(memberKey);
+    }
+
+    private void unlinkKakaoAccount(String targetId) {
+        String url = "https://kapi.kakao.com/v1/user/unlink";
+
+        // WebClient를 사용하여 POST 요청
+        webClient.post()
+                .uri(url)
+                .header(HttpHeaders.AUTHORIZATION, "KakaoAK " + kakaoAdminKey)
+                .body(BodyInserters.fromFormData("target_id_type", "user_id")
+                        .with("target_id", String.valueOf(targetId)))  // long을 Stri
+                .retrieve()
+                .bodyToMono(String.class)
+                .block(); // 비동기 처리 필요에 따라 조정
     }
 }

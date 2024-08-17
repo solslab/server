@@ -42,7 +42,7 @@ public record OAuth2UserInfo(
                 .build();
     }
 
-    public Member toEntity(String registrationId) {
+    public Member toEntity(String registrationId, String tid) {
         SocialType socialType = switch (registrationId) {
             case "kakao" -> SocialType.KAKAO;
             // case "google" -> SocialType.GOOGLE;
@@ -56,6 +56,7 @@ public record OAuth2UserInfo(
                 .socialType(socialType)
                 .memberKey(KeyGenerator.generateKey())
                 .role(Role.USER)
+                .tid(tid)
                 .build();
     }
 }

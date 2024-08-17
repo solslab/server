@@ -67,4 +67,12 @@ public class MemberController {
     ) {
         return ResponseEntity.ok(memberService.memberInfo(memberKey));
     }
+
+    // 회원 탈퇴
+    @RoleUser
+    @DeleteMapping
+    public ResponseEntity<Void> deleteMember(@AuthenticationPrincipal UserDetails userDetails) {
+        memberService.deleteMember(userDetails.getUsername());
+        return ResponseEntity.noContent().build();
+    }
 }
