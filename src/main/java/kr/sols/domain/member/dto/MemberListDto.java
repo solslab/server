@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static kr.sols.common.FormatDate.formatDate;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -30,13 +32,5 @@ public class MemberListDto {
                 .socialType(member.getSocialType())
                 .createdDate(formatDate(member.getCreatedDate()))
                 .build();
-    }
-
-    private static String formatDate(LocalDateTime date) {
-        if (date == null) {
-            return null;
-        }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return date.format(formatter);
     }
 }

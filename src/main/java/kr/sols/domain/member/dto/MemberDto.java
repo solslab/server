@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static kr.sols.common.FormatDate.formatDate;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -40,13 +42,5 @@ public class MemberDto {
                 .build();
 
         return memberDto;
-    }
-
-    private static String formatDate(LocalDateTime date) {
-        if (date == null) {
-            return null;
-        }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return date.format(formatter);
     }
 }
