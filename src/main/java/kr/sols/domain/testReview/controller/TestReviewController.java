@@ -26,13 +26,12 @@ public class TestReviewController {
 
     // 코테 후기 생성
     @RoleUser
-    @PostMapping("/tr/{companyId}")
+    @PostMapping("/tr")
     public ResponseEntity<TestReviewCreatedResponse> createTestReview(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody TestReviewRequest request,
-            @PathVariable UUID companyId
+            @RequestBody TestReviewRequest request
     ) {
-        TestReviewCreatedResponse res = testReviewService.createTestReview(request, companyId, userDetails.getUsername());
+        TestReviewCreatedResponse res = testReviewService.createTestReview(request, userDetails.getUsername());
         return ResponseEntity.ok(res);
     }
 

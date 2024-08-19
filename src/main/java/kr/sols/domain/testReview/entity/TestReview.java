@@ -28,53 +28,52 @@ public class TestReview extends BaseTimeEntity {
     private UUID companyId; // 반정규화
 
     @Column(length = 20)
+    @NotBlank(message = "회사명을 입력해주세요")
     private String companyName; // 반정규화
 
-    @NotNull(message = "회원 티어를 입력해주세요.")
+    @NotNull(message = "회원 티어를 입력해주세요")
     @Min(0)
     @Max(36)
     private int memberTier; // 반정규화
 
-    @NotNull(message = "응시년도를 입력해주세요.")
-    @Min(2000)
-    @Max(2030)
-    private int trYear;
+    @NotNull(message = "응시년도를 입력해주세요")
+    private String trYear;
 
     @Column(length = 15)
     private String trPosition;
 
-    @NotBlank(message = "경력구분을 선택해주세요.")
+    @NotBlank(message = "경력구분을 선택해주세요")
     @Column(length = 5)
     @Pattern(regexp = "^(신입|인턴|경력)$")
     private String trCareer;
 
-    @NotNull(message = "총 문제 수를 입력해주세요.")
+    @NotNull(message = "총 문제 수를 입력해주세요")
     @Min(1)
     @Max(30)
     private int trProblemNum;
 
-    @NotNull(message = "푼 문제 수를 입력해주세요.")
+    @NotNull(message = "푼 문제 수를 입력해주세요")
     @Min(0)
     @Max(30)
     private int trSolvedNum;
 
-    @NotBlank(message = "합격여부를 선택해주세요.")
+    @NotBlank(message = "합격여부를 선택해주세요")
     @Column(length = 5, nullable = false)
     @Pattern(regexp = "^(합격|불합격|대기중)$")
     private String trPassStatus;
 
     @Convert(converter = StringListConverter.class)
     @Column(nullable = false)
-    @NotEmpty(message = "문제유형을 선택해주세요.")
+    @NotEmpty(message = "문제유형을 선택해주세요")
     private List<String> trProblemType;
 
-    @NotBlank(message = "한줄리뷰를 입력해주세요.")
+    @NotBlank(message = "한줄리뷰를 입력해주세요")
     @Column(length = 50, nullable = false)
     private String trComment;
 
 
     @Builder
-    public TestReview (UUID id, String memberKey, String memberName, UUID companyId, String companyName, int memberTier, int trYear, String trPosition, String trCareer, int trProblemNum, int trSolvedNum, String trPassStatus, List<String> trProblemType, String trComment) {
+    public TestReview (UUID id, String memberKey, String memberName, UUID companyId, String companyName, int memberTier, String trYear, String trPosition, String trCareer, int trProblemNum, int trSolvedNum, String trPassStatus, List<String> trProblemType, String trComment) {
         this.id = id;
         this.memberKey = memberKey;
         this.memberName = memberName;
