@@ -6,7 +6,10 @@ import kr.sols.domain.member.repository.MemberRepository;
 import kr.sols.domain.position.Exception.PositionException;
 import kr.sols.domain.position.entity.Position;
 import kr.sols.domain.position.repository.PositionRepository;
+import kr.sols.domain.suggestion.dto.SuggestionCreatedReq;
 import kr.sols.domain.suggestion.dto.SuggestionCreatedRes;
+import kr.sols.domain.suggestion.entity.Status;
+import kr.sols.domain.suggestion.entity.Suggestion;
 import kr.sols.domain.suggestion.repository.SuggestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,12 +28,20 @@ public class SuggestionService {
     private final SuggestionRepository suggestionRepository;
 
     @Transactional
-    public SuggestionCreatedRes createSuggestion(String memberKey, UUID positionId) {
+    public SuggestionCreatedRes createSuggestion(String memberKey, UUID positionId, SuggestionCreatedReq request) {
         Member member = memberRepository.findByMemberKey(memberKey).orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
         Position position = positionRepository.findById(positionId).orElseThrow(() -> new PositionException(POSITION_NOT_FOUND));
 
         // 생성
+        Suggestion suggestion = Suggestion.builder()
+                .position(position)
+                .member(member)
+                .suggestionContent(request.getSuggestionContent())
+                .suggestionStatus(Status.NOT_STARTED)
+                .build();
 
-        return null;
+        Suggestion savedSuggestion = suggestionRepository.save(suggestion);
+
+        return new SuggestionCreatedRes(savedSuggestion.getId());
     }
 }
