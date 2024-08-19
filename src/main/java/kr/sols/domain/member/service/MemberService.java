@@ -55,6 +55,7 @@ public class MemberService {
     @Transactional
     public MemberDto memberEdit(MemberEditRequest request, String memberKey) {
         Member member = findByMemberKeyOrThrow(memberKey);
+        System.out.println("alplatform: "+request.getAlPlatform());
         member.updateMember(request);
         return MemberDto.fromEntity(member);
     }

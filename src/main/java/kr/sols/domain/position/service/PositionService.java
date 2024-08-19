@@ -1,5 +1,6 @@
 package kr.sols.domain.position.service;
 
+import kr.sols.common.TypeValidator;
 import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.repository.CompanyRepository;
@@ -34,6 +35,10 @@ public class PositionService {
         Company targetCompany = companyRepository.findById(companyId).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
         if (positionRepository.existsByCompanyIdAndPositionName(companyId, positionDto.getPositionName())) {
             throw new PositionException(DUPLICATED_POSITION_NAME);
+        }
+
+        if (!TypeValidator.isValidSupportLanguagesTypeList(positionDto.getSupportLanguages())) {
+            throw new PositionException(INVALID_LANGUAGE_TYPE);
         }
 
         // 생성

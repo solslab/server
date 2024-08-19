@@ -3,6 +3,7 @@ package kr.sols.domain.member.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import kr.sols.common.StringListConverter;
 import kr.sols.domain.member.dto.MemberEditRequest;
 import kr.sols.common.BaseTimeEntity;
@@ -35,6 +36,9 @@ public class Member extends BaseTimeEntity {
     @Convert(converter = StringListConverter.class)
     private List<String> preferLanguages;
 
+    @Enumerated(value = EnumType.STRING)
+    private AlPlatform alPlatform;
+
     @Min(0)
     @Max(36)
     private Integer memberTier;
@@ -59,11 +63,12 @@ public class Member extends BaseTimeEntity {
 
 
     @Builder
-    public Member(String name, String nickname, String email, SocialType socialType, List<String> preferLanguages, Integer memberTier, List<String> preferIndustries, String memberKey, Role role, String tid) {
+    public Member(String name, String nickname, String email, SocialType socialType, List<String> preferLanguages, AlPlatform alPlatform, Integer memberTier, List<String> preferIndustries, String memberKey, Role role, String tid) {
         this.name = name;
         this.nickname = nickname;
         this.email = email;
         this.socialType = socialType;
+        this.alPlatform = alPlatform;
         this.memberTier = memberTier;
         this.preferLanguages = preferLanguages;
 //        this.preferPositions = preferPositions;
@@ -76,6 +81,9 @@ public class Member extends BaseTimeEntity {
     public void updateMember(MemberEditRequest request) {
         if (request.getNickname() != null) {
             this.nickname = request.getNickname();
+        }
+        if (request.getAlPlatform() != null) {
+            this.alPlatform = request.getAlPlatform();
         }
         if (request.getMemberTier() != null) {
             this.memberTier = request.getMemberTier();
