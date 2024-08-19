@@ -1,6 +1,9 @@
 package kr.sols.domain.company.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import kr.sols.common.StringListConverter;
 import kr.sols.common.BaseTimeEntity;
 import kr.sols.common.TypeValidator;
@@ -23,11 +26,11 @@ public class Company extends BaseTimeEntity {
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(nullable = false, length = 10)
+    @NotBlank(message = "회사명을 입력해주세요")
     private String companyName;
 
     @Convert(converter = StringListConverter.class)
-    @Column(nullable = false)
+    @NotEmpty(message = "산업분야를 입력해주세요")
     private List<String> industryType;
 
     private String companyLogo;
@@ -41,10 +44,4 @@ public class Company extends BaseTimeEntity {
         this.industryType = industryType;
         this.companyLogo = companyLogo;
     }
-
-//    public void updateCompany(MemberEditRequest request) {
-//        if (request.get != null) {
-//            this.preferLanguages = request.getPreferLanguages();
-//        }
-//    }
 }

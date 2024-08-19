@@ -6,12 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PositionDto {
+    private UUID positionId;
     private String positionName;
     private List<String> supportLanguages;
     private String testTime;
@@ -25,6 +27,7 @@ public class PositionDto {
 
     public static PositionDto fromEntity(Position position) {
         return PositionDto.builder()
+                .positionId(position.getId())
                 .positionName(position.getPositionName())
                 .supportLanguages(position.getSupportLanguages())
                 .testTime(position.getTestTime())
