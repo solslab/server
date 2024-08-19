@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Position extends BaseTimeEntity {
@@ -68,10 +67,9 @@ public class Position extends BaseTimeEntity {
     private String note;
 
     @Builder
-    public Position(UUID id, Company company, String positionName, List<String> supportLanguages,
+    public Position(Company company, String positionName, List<String> supportLanguages,
                     String testTime, String problemInfo, String permitIde, String permitSearch, String hiddenCase,
                     String examMode, String testPlace, String note) {
-        this.id = id;
         this.company = company;
         this.positionName = positionName;
         this.supportLanguages = supportLanguages;
@@ -87,19 +85,19 @@ public class Position extends BaseTimeEntity {
 
     public void updatePosition(PositionDto positionDto) {
         if (positionDto.getPositionName() != null) {
-            setPositionName(positionDto.getPositionName());
+            this.positionName = positionDto.getPositionName();
         }
         if (positionDto.getSupportLanguages() != null) {
-            setSupportLanguages(positionDto.getSupportLanguages());
+            this.supportLanguages = positionDto.getSupportLanguages();
         }
 
-        setTestTime(positionDto.getTestTime());
-        setProblemInfo(positionDto.getProblemInfo());
-        setPermitIde(positionDto.getPermitIde());
-        setPermitSearch(positionDto.getPermitSearch());
-        setHiddenCase(positionDto.getHiddenCase());
-        setExamMode(positionDto.getExamMode());
-        setTestPlace(positionDto.getTestPlace());
-        setNote(positionDto.getNote());
+        this.testTime = positionDto.getTestTime();
+        this.problemInfo = positionDto.getProblemInfo();
+        this.permitIde = positionDto.getPermitIde();
+        this.permitSearch = positionDto.getPermitSearch();
+        this.hiddenCase = positionDto.getHiddenCase();
+        this.examMode = positionDto.getExamMode();
+        this.testPlace = positionDto.getTestPlace();
+        this.note = positionDto.getNote();
     }
 }

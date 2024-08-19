@@ -1,4 +1,5 @@
 package kr.sols.domain.member.dto;
+import kr.sols.domain.member.entity.AlPlatform;
 import kr.sols.domain.member.entity.SocialType;
 import kr.sols.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class MemberDto {
     private String name;
     private String nickname;
     private String email;
+    private AlPlatform alPlatform;
     private Integer memberTier;
     private List<String> preferLanguages;
 //    private List<String> preferPositions;
@@ -29,10 +31,11 @@ public class MemberDto {
     private String createdDate;
 
     public static MemberDto fromEntity(Member member) {
-        MemberDto memberDto = MemberDto.builder()
+        return MemberDto.builder()
                 .name(member.getName())
                 .nickname(member.getNickname())
                 .email(member.getEmail())
+                .alPlatform(member.getAlPlatform())
                 .memberTier(member.getMemberTier())
                 .preferLanguages(member.getPreferLanguages())
 //                .preferPositions(member.getPreferPositions())
@@ -40,7 +43,5 @@ public class MemberDto {
                 .socialType(member.getSocialType())
                 .createdDate(formatDate(member.getCreatedDate()))
                 .build();
-
-        return memberDto;
     }
 }

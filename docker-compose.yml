@@ -8,6 +8,8 @@ services:
       - "8080:8080"
     depends_on:
       - sols-redis
+    environment:
+      TZ: "Asia/Seoul"
 
   sols-redis:
     image: redis:latest
