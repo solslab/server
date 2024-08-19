@@ -70,7 +70,7 @@ public class PositionController {
     }
 
     // 기업 탭 - 직무별 코테정보 조회
-    @GetMapping("tab/testinfo/{positionId}")
+    @GetMapping("tab/testInfo/{positionId}")
     public ResponseEntity<PositionTabDto> getPositionInfo(@PathVariable("positionId") UUID positionId) {
         // 인증 상태 확인
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
