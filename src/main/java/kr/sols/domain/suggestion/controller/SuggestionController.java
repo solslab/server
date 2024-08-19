@@ -24,7 +24,7 @@ public class SuggestionController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable UUID positionId,
             @RequestBody SuggestionCreatedReq request) {
-        SuggestionCreatedRes sug = suggestionService.createSuggestion(userDetails.getUsername(), positionId);
+        SuggestionCreatedRes sug = suggestionService.createSuggestion(userDetails.getUsername(), positionId, request);
         return ResponseEntity.ok(sug);
     }
 

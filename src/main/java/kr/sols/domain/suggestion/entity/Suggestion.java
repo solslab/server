@@ -35,7 +35,6 @@ public class Suggestion extends BaseTimeEntity {
     @NotEmpty(message = "정보수정요청 내용을 입력해주세요")
     private String suggestionContent;
 
-    @NotEmpty(message = "처리 상태를 입력해주세요")
     @Enumerated(value = EnumType.STRING)
     private Status suggestionStatus;
 
@@ -44,7 +43,7 @@ public class Suggestion extends BaseTimeEntity {
         this.member = member;
         this.position = position;
         this.suggestionContent = suggestionContent;
-        this. suggestionStatus = suggestionStatus;
+        this.suggestionStatus = suggestionStatus;
     }
 
     public void updateStatus(SuggestionStatusEditReq request) {
