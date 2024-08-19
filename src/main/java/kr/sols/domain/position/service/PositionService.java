@@ -10,6 +10,7 @@ import kr.sols.domain.position.Exception.PositionException;
 import kr.sols.domain.position.dto.PositionCreatedResponse;
 import kr.sols.domain.position.dto.PositionDto;
 import kr.sols.domain.position.dto.PositionListDto;
+import kr.sols.domain.position.dto.PositionReq;
 import kr.sols.domain.position.entity.Position;
 import kr.sols.domain.position.repository.PositionRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,30 +31,30 @@ public class PositionService {
     private final PositionRepository positionRepository;
 
     @Transactional
-    public PositionCreatedResponse createPosition(UUID companyId, PositionDto positionDto) {
+    public PositionCreatedResponse createPosition(UUID companyId, PositionReq request) {
         // 검증 로직
         Company targetCompany = companyRepository.findById(companyId).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
-        if (positionRepository.existsByCompanyIdAndPositionName(companyId, positionDto.getPositionName())) {
+        if (positionRepository.existsByCompanyIdAndPositionName(companyId, request.getPositionName())) {
             throw new PositionException(DUPLICATED_POSITION_NAME);
         }
 
-        if (!TypeValidator.isValidSupportLanguagesTypeList(positionDto.getSupportLanguages())) {
+        if (!TypeValidator.isValidSupportLanguagesTypeList(request.getSupportLanguages())) {
             throw new PositionException(INVALID_LANGUAGE_TYPE);
         }
 
         // 생성
         Position position = Position.builder()
                 .company(targetCompany)
-                .positionName(positionDto.getPositionName())
-                .supportLanguages(positionDto.getSupportLanguages())
-                .testTime(positionDto.getTestTime())
-                .problemInfo(positionDto.getProblemInfo())
-                .permitIde(positionDto.getPermitIde())
-                .permitSearch(positionDto.getPermitSearch())
-                .hiddenCase(positionDto.getHiddenCase())
-                .examMode(positionDto.getExamMode())
-                .testPlace(positionDto.getTestPlace())
-                .note(positionDto.getNote())
+                .positionName(request.getPositionName())
+                .supportLanguages(request.getSupportLanguages())
+                .testTime(request.getTestTime())
+                .problemInfo(request.getProblemInfo())
+                .permitIde(request.getPermitIde())
+                .permitSearch(request.getPermitSearch())
+                .hiddenCase(request.getHiddenCase())
+                .examMode(request.getExamMode())
+                .testPlace(request.getTestPlace())
+                .note(request.getNote())
                 .build();
 
         Position savedPosition = positionRepository.save(position);
@@ -78,11 +79,10 @@ public class PositionService {
 
 
     @Transactional
-    public PositionDto updatePosition(UUID positionId, PositionDto positionDto) {
-        System.out.println(positionDto.getSupportLanguages());
+    public PositionDto updatePosition(UUID positionId, PositionReq request) {
         Position position = positionRepository.findById(positionId)
                 .orElseThrow(() -> new PositionException(POSITION_NOT_FOUND));
-        position.updatePosition(positionDto);
+        position.updatePosition(request);
         return PositionDto.fromEntity(position);
     }
 

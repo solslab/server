@@ -10,4 +10,5 @@
 //@NoArgsConstructor
 //@AllArgsConstructor
 //public class SuggestionDto {
+//
 //}

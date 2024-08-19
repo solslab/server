@@ -2,10 +2,7 @@ package kr.sols.domain.position.controller;
 
 import kr.sols.auth.annotation.RoleAdmin;
 import kr.sols.auth.annotation.RoleUser;
-import kr.sols.domain.position.dto.PositionCreatedResponse;
-import kr.sols.domain.position.dto.PositionDto;
-import kr.sols.domain.position.dto.PositionListDto;
-import kr.sols.domain.position.dto.PositionTabDto;
+import kr.sols.domain.position.dto.*;
 import kr.sols.domain.position.service.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,10 +25,10 @@ public class PositionController {
     @RoleAdmin
     @PostMapping("/company/{companyId}/position")
     public ResponseEntity<PositionCreatedResponse> createPosition(
-            @RequestBody PositionDto positionDto,
+            @RequestBody PositionReq request,
             @PathVariable UUID companyId
     ) {
-        PositionCreatedResponse createdPosition = positionService.createPosition(companyId, positionDto);
+        PositionCreatedResponse createdPosition = positionService.createPosition(companyId, request);
         return ResponseEntity.ok(createdPosition);
     }
 
@@ -56,8 +53,8 @@ public class PositionController {
     @PutMapping("/position/{positionId}")
     public ResponseEntity<PositionDto> updatePosition(
             @PathVariable UUID positionId,
-            @RequestBody PositionDto positionDto) {
-        PositionDto updatedPosition = positionService.updatePosition(positionId, positionDto);
+            @RequestBody PositionReq request) {
+        PositionDto updatedPosition = positionService.updatePosition(positionId, request);
         return ResponseEntity.ok(updatedPosition);
     }
 
