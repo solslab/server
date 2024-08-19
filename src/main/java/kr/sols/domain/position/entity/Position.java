@@ -10,6 +10,7 @@ import kr.sols.common.StringListConverter;
 import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.member.dto.MemberEditRequest;
 import kr.sols.domain.position.dto.PositionDto;
+import kr.sols.domain.position.dto.PositionReq;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
@@ -83,21 +84,21 @@ public class Position extends BaseTimeEntity {
         this.note = note;
     }
 
-    public void updatePosition(PositionDto positionDto) {
-        if (positionDto.getPositionName() != null) {
-            this.positionName = positionDto.getPositionName();
+    public void updatePosition(PositionReq request) {
+        if (request.getPositionName() != null) {
+            this.positionName = request.getPositionName();
         }
-        if (positionDto.getSupportLanguages() != null) {
-            this.supportLanguages = positionDto.getSupportLanguages();
+        if (request.getSupportLanguages() != null) {
+            this.supportLanguages = request.getSupportLanguages();
         }
 
-        this.testTime = positionDto.getTestTime();
-        this.problemInfo = positionDto.getProblemInfo();
-        this.permitIde = positionDto.getPermitIde();
-        this.permitSearch = positionDto.getPermitSearch();
-        this.hiddenCase = positionDto.getHiddenCase();
-        this.examMode = positionDto.getExamMode();
-        this.testPlace = positionDto.getTestPlace();
-        this.note = positionDto.getNote();
+        this.testTime = request.getTestTime();
+        this.problemInfo = request.getProblemInfo();
+        this.permitIde = request.getPermitIde();
+        this.permitSearch = request.getPermitSearch();
+        this.hiddenCase = request.getHiddenCase();
+        this.examMode = request.getExamMode();
+        this.testPlace = request.getTestPlace();
+        this.note = request.getNote();
     }
 }
