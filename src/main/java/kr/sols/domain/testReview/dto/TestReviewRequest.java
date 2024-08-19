@@ -6,13 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestReviewRequest {
-    private int trYear;
+    private UUID companyId;
+    private String companyName;
+    private String trYear;
     private String trPostion;
     private String trCareer;
     private int trProblemNum;

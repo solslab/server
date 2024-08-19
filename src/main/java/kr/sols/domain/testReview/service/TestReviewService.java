@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,11 +36,17 @@ public class TestReviewService {
     private final CompanyRepository companyRepository;
 
     @Transactional
-    public TestReviewCreatedResponse createTestReview(TestReviewRequest request, UUID companyId, String memberKey) {
+    public TestReviewCreatedResponse createTestReview(TestReviewRequest request, String memberKey) {
         Member member = memberRepository.findByMemberKey(memberKey)
                 .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
 
-        Company company = companyRepository.findById(companyId).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
+        // companyId 입력이 됐을 때
+        if (request.getCompanyId() != null) {
+            Company company = companyRepository.findById(request.getCompanyId()).orElse(null);
+            if (request.getCompanyId() != null & !Objects.equals(company.getCompanyName(), request.getCompanyName())) {
+                throw new TestReviewException(TR_COMPANY_NOT_MATCH);
+            }
+        }
 
         if (member.getMemberTier() == null){
             throw new TestReviewException(MEMBER_TIER_UNDEFINED);
@@ -47,8 +55,8 @@ public class TestReviewService {
         TestReview testReview = TestReview.builder()
                 .memberKey(memberKey)
                 .memberName(member.getName())
-                .companyId(companyId)
-                .companyName(company.getCompanyName())
+                .companyId(request.getCompanyId())
+                .companyName(request.getCompanyName())
                 .memberTier(member.getMemberTier())
                 .trYear(request.getTrYear())
                 .trPosition(request.getTrPostion())

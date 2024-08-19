@@ -21,7 +21,7 @@ public class TestReviewDto {
     private String companyName;
     private String memberName;
     private int memberTier;
-    private int trYear;
+    private String trYear;
     private String trPosition;
     private String trCareer;
     private int trProblemNum;

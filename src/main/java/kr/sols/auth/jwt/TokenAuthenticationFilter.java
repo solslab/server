@@ -64,7 +64,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean isPathExcluded(String requestURI) {
         // 특정 URL 패턴을 패스하도록 설정
-        return requestURI.startsWith("/tab/testinfo");
+        return requestURI.startsWith("/tab/testInfo");
     }
 }
 
