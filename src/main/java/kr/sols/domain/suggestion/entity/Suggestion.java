@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import kr.sols.common.BaseTimeEntity;
 import kr.sols.domain.member.entity.Member;
 import kr.sols.domain.position.entity.Position;
-import kr.sols.domain.suggestion.dto.SuggestionStatusEditReq;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -46,9 +45,9 @@ public class Suggestion extends BaseTimeEntity {
         this.suggestionStatus = suggestionStatus;
     }
 
-    public void updateStatus(SuggestionStatusEditReq request) {
-        if (request.getStatus() != null) {
-            this.suggestionStatus = request.getStatus();
+    public void updateStatus(Status status) {
+        if (status != null) {
+            this.suggestionStatus = status;
         }
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -37,4 +38,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest()
                 .body(new ErrorResponse(ErrorCode.INVALID_REQUEST, "확인할 수 없는 형태의 데이터가 들어왔습니다."));
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleEnumBindingException(MethodArgumentTypeMismatchException ex) {
+        if (ex.getRequiredType().isEnum()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponse(ErrorCode.INVALID_REQUEST, "Enum 타입에 맞지 않는 데이터: " + ex.getValue()));
+        }
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(ErrorCode.INTERNAL_ERROR, "An unexpected error occurred"));
+    }
+
 }
