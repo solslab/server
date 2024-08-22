@@ -36,8 +36,10 @@ public class TokenProvider {
     private SecretKey secretKey;
 //    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30L;  // 30분
 //    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L * 24 * 7;  // 7일
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 10L;  // 10분 - 테스트용
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 15L; // 15분 - 테스트용
+//    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 10L;  // 10분 - 테스트용
+//    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L; // 60분 - 테스트용
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 20L;  // 20초 - 테스트용
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L; // 60분 - 테스트용
 
     private static final String KEY_ROLE = "role";
     private final TokenService tokenService;
