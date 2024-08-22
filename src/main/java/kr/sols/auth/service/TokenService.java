@@ -2,11 +2,14 @@ package kr.sols.auth.service;
 
 import static kr.sols.exception.ErrorCode.TOKEN_EXPIRED;
 
+import kr.sols.auth.dto.CheckTokenResponse;
 import kr.sols.auth.exception.TokenException;
+import kr.sols.auth.jwt.TokenProvider;
 import kr.sols.redis.Token;
 import kr.sols.redis.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
