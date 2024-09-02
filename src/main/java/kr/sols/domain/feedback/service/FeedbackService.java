@@ -1,7 +1,5 @@
 package kr.sols.domain.feedback.service;
 
-import kr.sols.domain.company.dto.CompanyListDto;
-import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.feedback.dto.FeedbackCreatedRes;
 import kr.sols.domain.feedback.dto.FeedbackDto;
 import kr.sols.domain.feedback.dto.FeedbackListDto;
