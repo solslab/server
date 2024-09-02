@@ -40,6 +40,9 @@ public enum ErrorCode {
     // suggestion
     SUGGESTION_NOT_FOUND(NOT_FOUND, "정보수정요청을 찾을 수 없습니다."),
 
+    // feedback
+    FEEDBACK_NOT_FOUND(NOT_FOUND, "피드백을 찾을 수 없습니다."),
+
     // S3
     FAIL_TO_CONVERT_FILE(BAD_REQUEST, "MultipartFile을 File로 전환하는데 실패했습니다."),
 
