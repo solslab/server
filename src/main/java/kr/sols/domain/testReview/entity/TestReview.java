@@ -43,7 +43,7 @@ public class TestReview extends BaseTimeEntity {
     private String trPosition;
 
     @NotBlank(message = "경력구분을 선택해주세요")
-    @Column(length = 5)
+    @Column(length = 2)
     @Pattern(regexp = "^(신입|인턴|경력)$")
     private String trCareer;
 
@@ -58,7 +58,7 @@ public class TestReview extends BaseTimeEntity {
     private int trSolvedNum;
 
     @NotBlank(message = "합격여부를 선택해주세요")
-    @Column(length = 5, nullable = false)
+    @Column(length = 3, nullable = false)
     @Pattern(regexp = "^(합격|불합격|대기중)$")
     private String trPassStatus;
 
@@ -68,7 +68,7 @@ public class TestReview extends BaseTimeEntity {
     private List<String> trProblemType;
 
     @NotBlank(message = "한줄리뷰를 입력해주세요")
-    @Column(length = 50, nullable = false)
+    @Column(length = 100, nullable = false)
     private String trComment;
 
 

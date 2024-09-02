@@ -31,8 +31,7 @@ public class Feedback extends BaseTimeEntity {
     @Min(1)
     private int rating;
 
-    @NotBlank
-    @Column(length = 100)
+    @Column(length = 50)
     private String feedbackContent;
 
     public Feedback(int rating, String feedbackContent) {

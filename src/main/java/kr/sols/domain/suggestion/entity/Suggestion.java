@@ -32,6 +32,7 @@ public class Suggestion extends BaseTimeEntity {
     private Position position;
 
     @NotEmpty(message = "정보수정요청 내용을 입력해주세요")
+    @Column(length = 200)
     private String suggestionContent;
 
     @Enumerated(value = EnumType.STRING)
