@@ -26,6 +26,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -59,6 +60,7 @@ public class SecurityConfig {
             CorsConfiguration config = new CorsConfiguration();
             config.setAllowedHeaders(Collections.singletonList("*"));
             config.setAllowedMethods(Collections.singletonList("*"));
+            config.setExposedHeaders(Collections.singletonList("Authorization"));
             config.setAllowedOriginPatterns(Collections.singletonList("*")); // ⭐️ 허용할 origin
             config.setAllowCredentials(true);
             return config;
