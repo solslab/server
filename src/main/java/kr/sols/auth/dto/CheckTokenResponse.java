@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 
 public class CheckTokenResponse {
     String AccessStatus;
-    String RefreshStatus;
     String newToken;
 }
