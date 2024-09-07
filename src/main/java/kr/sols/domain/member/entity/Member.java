@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import kr.sols.common.StringListConverter;
 import kr.sols.domain.member.dto.MemberEditRequest;
 import kr.sols.common.BaseTimeEntity;
@@ -43,9 +44,6 @@ public class Member extends BaseTimeEntity {
     @Max(36)
     private Integer memberTier;
 
-//    @Convert(converter = StringListConverter.class)
-//    private List<String> preferPositions;
-
     @Convert(converter = StringListConverter.class)
     private List<String> preferIndustries;
 
@@ -71,7 +69,6 @@ public class Member extends BaseTimeEntity {
         this.alPlatform = alPlatform;
         this.memberTier = memberTier;
         this.preferLanguages = preferLanguages;
-//        this.preferPositions = preferPositions;
         this.preferIndustries = preferIndustries;
         this.memberKey = memberKey;
         this.role = role;
@@ -91,9 +88,6 @@ public class Member extends BaseTimeEntity {
         if (request.getPreferLanguages() != null) {
             this.preferLanguages = request.getPreferLanguages();
         }
-//        if (request.getPreferPositions() != null) {
-//            this.preferPositions = request.getPreferPositions();
-//        }
         if (request.getPreferIndustries() != null) {
             this.preferIndustries = request.getPreferIndustries();
         }

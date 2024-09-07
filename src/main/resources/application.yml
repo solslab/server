@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: oauth
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${spring.datasource.url}
@@ -16,7 +18,6 @@ spring:
   data:
     redis:
       port: 6379
-      host: localhost # docker 배포 시 -> redis로 변경해야함
   servlet:
     multipart:
       file-size-threshold: 2MB

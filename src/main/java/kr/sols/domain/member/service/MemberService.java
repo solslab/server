@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-    @Value("${KAKAO_ADMIN}") // 카카오 Admin Key를 application.properties 또는 application.yml에 설정해두세요.
+    @Value("${KAKAO_ADMIN}") // 카카오 Admin Key를 application-prod.properties 또는 application.yml에 설정해두세요.
     private String kakaoAdminKey;
     private final WebClient webClient;
     private final MemberRepository memberRepository;

@@ -40,4 +40,5 @@ out/
 .DS_Store
 
 ### Security ###
-application.properties
+application-dev.properties
+application-prod.properties

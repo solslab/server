@@ -18,14 +18,12 @@ import static kr.sols.common.FormatDate.formatDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDto {
-//    private String memberKey;
     private String name;
     private String nickname;
     private String email;
     private AlPlatform alPlatform;
     private Integer memberTier;
     private List<String> preferLanguages;
-//    private List<String> preferPositions;
     private List<String> preferIndustries;
     private SocialType socialType;
     private String createdDate;
@@ -37,11 +35,22 @@ public class MemberDto {
                 .email(member.getEmail())
                 .alPlatform(member.getAlPlatform())
                 .memberTier(member.getMemberTier())
-                .preferLanguages(member.getPreferLanguages())
-//                .preferPositions(member.getPreferPositions())
-                .preferIndustries(member.getPreferIndustries())
+                .preferLanguages(parseList(member.getPreferLanguages()))
+                .preferIndustries(parseList(member.getPreferIndustries()))
                 .socialType(member.getSocialType())
                 .createdDate(formatDate(member.getCreatedDate()))
                 .build();
     }
+
+    private static List<String> parseList(List<String> values) {
+        if (values == null || values.isEmpty()) {
+            return null;
+        }
+
+        // 모든 요소가 빈 문자열인지 검사
+        boolean allEmpty = values.stream().allMatch(String::isEmpty);
+
+        return allEmpty ? null : values;
+    }
+
 }
