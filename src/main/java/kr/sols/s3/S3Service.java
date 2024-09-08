@@ -35,8 +35,6 @@ public class S3Service{
     private final String DIR_NAME = "company_logo";
 
     public String upload(String fileName, MultipartFile multipartFile, String extend) throws IOException { // dirName의 디렉토리가 S3 Bucket 내부에 생성됨
-
-        System.out.println("dngkgk"+multipartFile);
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new S3Exception(FAIL_TO_CONVERT_FILE));
         return upload(fileName, uploadFile, extend);
