@@ -82,11 +82,12 @@ public class SecurityConfig {
                 // 요청 인증 및 인가 설정
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                                new AntPathRequestMatcher("/api/auth/success"),
-                                new AntPathRequestMatcher("/api/auth/check"),
-                                new AntPathRequestMatcher("/api/company/**", "GET"),
-                                new AntPathRequestMatcher("/api/admin/login"),
-                                new AntPathRequestMatcher("/api/feedback", "POST")
+                                new AntPathRequestMatcher("/login"),
+                                new AntPathRequestMatcher("/auth/success"),
+                                new AntPathRequestMatcher("/auth/check"),
+                                new AntPathRequestMatcher("/company/**", "GET"),
+                                new AntPathRequestMatcher("/admin/login"),
+                                new AntPathRequestMatcher("/feedback", "POST")
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
