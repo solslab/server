@@ -82,6 +82,7 @@ public class SecurityConfig {
                 // 요청 인증 및 인가 설정
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
+                                new AntPathRequestMatcher("/api/**"),
                                 new AntPathRequestMatcher("/login"),
                                 new AntPathRequestMatcher("/auth/success"),
                                 new AntPathRequestMatcher("/auth/check"),

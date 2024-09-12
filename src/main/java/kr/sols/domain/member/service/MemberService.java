@@ -7,6 +7,7 @@ import kr.sols.domain.member.entity.Member;
 import kr.sols.domain.member.dto.MemberDto;
 import kr.sols.domain.member.dto.MemberEditRequest;
 import kr.sols.domain.member.dto.MemberListDto;
+import kr.sols.domain.suggestion.repository.SuggestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ public class MemberService {
     private String kakaoAdminKey;
     private final WebClient webClient;
     private final MemberRepository memberRepository;
+    private final SuggestionRepository suggestionRepository;
 
     @Transactional(readOnly = true)
     public MemberDto memberInfo(String memberKey) {
@@ -41,9 +43,7 @@ public class MemberService {
         Member member = findByMemberKeyOrThrow(memberKey);
         Map<String, String> response = new HashMap<>();
 
-        if (member.getMemberTier() == null ||
-                member.getPreferIndustries() == null ||
-                member.getPreferLanguages() == null) {
+        if (member.getMemberTier() == null) {
             response.put("status", "incomplete");
         } else {
             response.put("status", "complete");
@@ -83,6 +83,7 @@ public class MemberService {
         // 카카오 계정 연결 끊기
         unlinkKakaoAccount(tid);
 
+        suggestionRepository.deleteAllByMemberMemberKey(memberKey);;
         // DB에서 삭제
         memberRepository.deleteByMemberKey(memberKey);
     }

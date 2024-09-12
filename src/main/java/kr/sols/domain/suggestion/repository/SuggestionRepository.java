@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface SuggestionRepository extends JpaRepository<Suggestion, UUID> {
 
-    // 리스트 조회, 1. 다중 fetch join
+    // 리스트 조회
     @Query("SELECT s FROM Suggestion s " +
             "JOIN FETCH s.member m " +
             "JOIN FETCH s.position p " +
@@ -28,4 +28,6 @@ public interface SuggestionRepository extends JpaRepository<Suggestion, UUID> {
             "ORDER BY s.createdDate DESC")
     Optional<Suggestion> findByIdWithMemberPositionAndCompany(UUID id);
 
+
+    void deleteAllByMemberMemberKey(String memberKey);
 }
