@@ -12,7 +12,7 @@ public class FeedbackListDto {
     private List<FeedbackDto> feedbackList;
 
     public FeedbackListDto(double averageRating, List<FeedbackDto> feedbackList) {
-        this.averageRating = averageRating;
+        this.averageRating = Math.round(averageRating * 10.0) / 10.0;
         this.feedbackList = feedbackList;
     }
 
