@@ -88,10 +88,14 @@ public class CompanyController {
 
     // 기업 검색
     @GetMapping("/search")
-    public ResponseEntity<List<CompanyListDto>> searchCompanies(
+    public List<CompanyListDto> searchCompanies(
             @RequestParam(value = "q", defaultValue = "") String searchTerm) {
-        List<CompanyListDto> companies = companyService.searchCompanies(searchTerm);
-        return ResponseEntity.ok(companies);
+        return companyService.searchCompanies(searchTerm);
     }
 
+    // 홈화면 - 랜덤 기업 리스트
+    @GetMapping("/home-random")
+    public List<CompanyListDto> getRandomCompaniesForHome() {
+        return companyService.getRandomCompaniesForHome();
+    }
 }

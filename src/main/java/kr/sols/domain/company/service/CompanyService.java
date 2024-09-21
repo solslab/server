@@ -130,4 +130,13 @@ public class CompanyService {
                 .map(CompanyListDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public List<CompanyListDto> getRandomCompaniesForHome() {
+        List<Company> companies = companyRepository.findRandomCompaniesForHome();
+
+        return companies.stream()
+                .map(CompanyListDto::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

@@ -20,4 +20,7 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
     Optional<Company> findById(UUID id);
     List<Company> findByCompanyNameStartingWith(String searchTerm);
 
+    @Query(value = "SELECT * FROM Company ORDER BY RAND() LIMIT 15", nativeQuery = true)
+    List<Company> findRandomCompaniesForHome();
+
 }
