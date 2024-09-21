@@ -59,7 +59,7 @@ public class AuthController {
                 "<title>로그인</title>" +
                 "</head>" +
                 "<body>" +
-                "<a href=\"/api/oauth2/authorization/kakao\" id=\"kakao-login-btn\">카카오 로그인</a>" +
+                "<a href=\"/oauth2/authorization/kakao\" id=\"kakao-login-btn\">카카오 로그인</a>" +
                 "</body>" +
                 "</html>";
     }

@@ -31,15 +31,13 @@ public class Position extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "Company cannot be null")
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_id")
     private Company company;
 
-    @Column(length = 10, nullable = false)
     @NotBlank(message = "Position name cannot be blank")
     private String positionName;
 
     @Convert(converter = StringListConverter.class)
-    @Column(nullable = false)
     @NotEmpty(message = "Support languages cannot be empty")
     private List<String> supportLanguages;
 
