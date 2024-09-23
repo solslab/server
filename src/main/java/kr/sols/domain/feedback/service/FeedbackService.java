@@ -7,6 +7,7 @@ import kr.sols.domain.feedback.entity.Feedback;
 import kr.sols.domain.feedback.repository.FeedbackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,12 +17,14 @@ import java.util.stream.Collectors;
 public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
 
+    @Transactional
     public FeedbackCreatedRes createFeedback(FeedbackDto feedbackDto) {
         Feedback feedback = new Feedback(feedbackDto.getRating(), feedbackDto.getFeedbackContent());
         feedback = feedbackRepository.save(feedback);
         return new FeedbackCreatedRes(feedback.getId());
     }
 
+    @Transactional(readOnly = true)
     public FeedbackListDto getAllFeedbacks() {
         List<Feedback> feedbacks = feedbackRepository.findAllByOrderByCreatedDateDesc();
 

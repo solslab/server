@@ -38,4 +38,3 @@ cloud:
 logging.level:
   org.springframework.boot.autoconfigure: ERROR
   org.hibernate.SQL: debug
-  org.springframework.security: debug

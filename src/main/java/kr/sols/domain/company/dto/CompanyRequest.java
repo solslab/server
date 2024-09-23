@@ -6,13 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompanyRequestDto {
+public class CompanyRequest {
     private String companyName;
     private List<String> industryType;
+    private List<String> searchTerms;
 }

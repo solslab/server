@@ -38,10 +38,14 @@ public class Company extends BaseTimeEntity {
     @OneToMany(mappedBy = "company")
     private List<Position> positions;
 
+    @Convert(converter = StringListConverter.class)
+    private List<String> searchTerms;
+
     @Builder
-    public Company(String companyName, List<String> industryType, String companyLogo) {
+    public Company(String companyName, List<String> industryType, String companyLogo, List<String> searchTerms) {
         this.companyName = companyName;
         this.industryType = industryType;
         this.companyLogo = companyLogo;
+        this.searchTerms = searchTerms;
     }
 }

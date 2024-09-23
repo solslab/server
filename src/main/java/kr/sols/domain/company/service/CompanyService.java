@@ -30,13 +30,14 @@ public class CompanyService {
     private final PositionRepository positionRepository;
 
     @Transactional
-    public CompanyCreatedResponse createCompany(CompanyRequestDto companyRequestDto) {
-        if (companyRepository.existsByCompanyName(companyRequestDto.getCompanyName())) {
+    public CompanyCreatedResponse createCompany(CompanyRequest request) {
+        if (companyRepository.existsByCompanyName(request.getCompanyName())) {
             throw new CompanyException(DUPLICATED_COMPANY_NAME);
         }
         Company company = Company.builder()
-                .companyName(companyRequestDto.getCompanyName())
-                .industryType(companyRequestDto.getIndustryType())
+                .companyName(request.getCompanyName())
+                .industryType(request.getIndustryType())
+                .searchTerms(request.getSearchTerms())
                 .build();
 
         Company savedCompany = companyRepository.save(company);
@@ -60,10 +61,11 @@ public class CompanyService {
     }
 
     @Transactional
-    public CompanyCreatedResponse updateCompany(UUID id, CompanyRequestDto companyRequestDto) {
+    public CompanyCreatedResponse updateCompany(UUID id, CompanyRequest request) {
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
-        company.setCompanyName(companyRequestDto.getCompanyName());
-        company.setIndustryType(companyRequestDto.getIndustryType());
+        company.setCompanyName(request.getCompanyName());
+        company.setIndustryType(request.getIndustryType());
+        company.setSearchTerms(request.getSearchTerms());
 
         Company updatedCompany = companyRepository.save(company);
         return new CompanyCreatedResponse(updatedCompany.getId());
@@ -87,7 +89,6 @@ public class CompanyService {
 
     @Transactional
     public CompanyLogoDto uploadCompanyLogo(UUID id, String fileName, MultipartFile multipartFile, String extend) throws IOException {
-        // 404 처리
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
 
         // 이미 로고가 있다면 S3에서 삭제
@@ -100,7 +101,6 @@ public class CompanyService {
         company.setCompanyLogo(url);
         companyRepository.save(company);
 
-        // DTO로 반환
         return new CompanyLogoDto(url);
     }
 
@@ -118,20 +118,20 @@ public class CompanyService {
         companyRepository.save(company);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CompanyListDto> searchCompanies(String searchTerm) {
         if (searchTerm == null || searchTerm.isBlank()) {
             return List.of();
         }
 
-        List<Company> companies = companyRepository.findByCompanyNameStartingWith(searchTerm);
+        List<Company> companies = companyRepository.searchCompanyByTerm(searchTerm);
 
         return companies.stream()
                 .map(CompanyListDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CompanyListDto> getRandomCompaniesForHome() {
         List<Company> companies = companyRepository.findRandomCompaniesForHome();
 

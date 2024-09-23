@@ -27,7 +27,7 @@ public class CompanyController {
     // 기업 생성
     @RoleAdmin
     @PostMapping
-    public ResponseEntity<CompanyCreatedResponse> createCompany(@RequestBody CompanyRequestDto companyRequestDto) {
+    public ResponseEntity<CompanyCreatedResponse> createCompany(@RequestBody CompanyRequest companyRequestDto) {
         // 검증 로직
         if (!TypeValidator.isValidIndustryTypeList(companyRequestDto.getIndustryType())) {
             throw new CompanyException(INVALID_INDUSTRY_TYPE);
@@ -47,7 +47,7 @@ public class CompanyController {
     // 기업 수정
     @RoleAdmin
     @PutMapping("/{id}")
-    public ResponseEntity<CompanyCreatedResponse> updateCompany(@PathVariable UUID id, @RequestBody CompanyRequestDto companyRequestDto) {
+    public ResponseEntity<CompanyCreatedResponse> updateCompany(@PathVariable UUID id, @RequestBody CompanyRequest companyRequestDto) {
         CompanyCreatedResponse updatedCompany = companyService.updateCompany(id, companyRequestDto);
         return ResponseEntity.ok(updatedCompany);
     }
