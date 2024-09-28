@@ -44,9 +44,6 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Check build file in libs directory
-      run: ls -l build/libs
-
     - name: Build and push
       id: docker_build
       uses: docker/build-push-action@v2
