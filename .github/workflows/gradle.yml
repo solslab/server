@@ -29,7 +29,10 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew clean build -x test
+      run: ./gradlew build
+
+    - name: Check build file in libs directory
+      run: ls -l build/libs
 
   dependency-submission:
 
