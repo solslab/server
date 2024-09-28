@@ -45,6 +45,8 @@ jobs:
         port: 22
         script: |
           pwd
+          cd /home/ubuntu/server
+          pwd
           docker pull ${{ secrets.DOCKER_USERNAME }}/sols-app:latest
           docker-compose down
           docker-compose up -d
