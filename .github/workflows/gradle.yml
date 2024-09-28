@@ -43,9 +43,8 @@ jobs:
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }} # pem 키
         port: 22
-        # 도커 작업
         script: |
-          cd /server
+          pwd
           docker pull ${{ secrets.DOCKER_USERNAME }}/sols-app:latest
           docker-compose down
           docker-compose up -d
