@@ -71,7 +71,7 @@ public class PositionService {
     @Transactional(readOnly = true)
     public List<PositionListDto> getAllPositionOfCompany(UUID companyId) {
         companyRepository.findById(companyId).orElseThrow(()-> new CompanyException(COMPANY_NOT_FOUND));
-        List<Position> positions = positionRepository.findAllByCompanyIdOrderByPositionNameAsc(companyId);
+        List<Position> positions = positionRepository.findAllByCompanyIdOrderByCreatedDateDesc(companyId);
         return positions.stream()
                 .map(PositionListDto::fromEntity)
                 .collect(Collectors.toList());
