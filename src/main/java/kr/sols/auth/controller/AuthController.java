@@ -49,7 +49,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.checkTokenAndRefresh(token));
     }
 
-    @GetMapping("/loginPage")
+    @GetMapping("/loginTest")
     public String getHtmlPage() {
         return "<!DOCTYPE html>" +
                 "<html lang=\"en\">" +
