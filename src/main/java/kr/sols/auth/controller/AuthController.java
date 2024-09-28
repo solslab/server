@@ -49,7 +49,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.checkTokenAndRefresh(token));
     }
 
-    @GetMapping("/login")
+    @GetMapping("/loginPage")
     public String getHtmlPage() {
         return "<!DOCTYPE html>" +
                 "<html lang=\"en\">" +
@@ -59,7 +59,7 @@ public class AuthController {
                 "<title>로그인</title>" +
                 "</head>" +
                 "<body>" +
-                "<a href=\"/oauth2/authorization/kakao\" id=\"kakao-login-btn\">카카오 로그인</a>" +
+                "<a href=\"api/oauth2/authorization/kakao\" id=\"kakao-login-btn\">카카오 로그인</a>" +
                 "</body>" +
                 "</html>";
     }
