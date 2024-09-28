@@ -42,6 +42,7 @@ jobs:
         host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }} # pem 키
+        port: 22
         # 도커 작업
         script: |
           cd /server
