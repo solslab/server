@@ -10,7 +10,7 @@ import java.util.UUID;
 @Repository
 public interface PositionRepository extends JpaRepository<Position, UUID> {
     boolean existsByCompanyIdAndPositionName(UUID companyId, String positionName);
-    List<Position> findAllByCompanyIdOrderByPositionNameAsc(UUID companyId);
+    List<Position> findAllByCompanyIdOrderByCreatedDateDesc(UUID companyId);
 
     void deleteAllByCompanyId(UUID companyId);
 }
