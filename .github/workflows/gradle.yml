@@ -28,6 +28,11 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - uses: actions/checkout@v4
+    - run: touch ./src/main/resources/application.properties
+    - run: echo "${{ secrets.PROD_CONFIG }}" > ./src/main/resources/application.properties
+    - run: cat ./src/main/resources/application.properties
+
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
