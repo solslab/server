@@ -17,12 +17,14 @@ public class CompanyListDto {
     private UUID companyId;
     private String companyName;
     private String companyLogo;
+    private List<String> industryType;
 
     public static CompanyListDto fromEntity(Company company) {
         return CompanyListDto.builder()
                 .companyId(company.getId())
                 .companyName(company.getCompanyName())
                 .companyLogo(company.getCompanyLogo())
+                .industryType(company.getIndustryType())
                 .build();
     }
 }
