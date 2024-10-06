@@ -72,6 +72,7 @@ public class MemberService {
     public MemberPageDto getAllMember(Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Page<Member> memberPage = memberRepository.findAllByOrderByCreatedDateDesc(pageable);
+
         int totalPageNum = memberPage.getTotalPages();
         int currentPageNum = memberPage.getNumber() + 1;
 

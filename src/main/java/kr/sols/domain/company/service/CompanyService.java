@@ -50,8 +50,10 @@ public class CompanyService {
     public CompanyPageDto getAllCompanies(Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         Page<Company> companyPage = companyRepository.findAllByOrderByCompanyNameAsc(pageable);
+
         int totalPageNum = companyPage.getTotalPages();
         int currentPageNum = companyPage.getNumber() + 1;
+
 
         if (currentPageNum > totalPageNum || currentPageNum < 1) throw new CompanyException(PAGE_NOT_FOUND);
 

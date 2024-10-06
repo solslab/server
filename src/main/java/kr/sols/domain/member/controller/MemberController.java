@@ -60,7 +60,8 @@ public class MemberController {
             @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "size", defaultValue = "10") Integer pageSize
     ) {
-        return ResponseEntity.ok(memberService.getAllMember(pageNum, pageSize));
+        MemberPageDto memberPage =  memberService.getAllMember(pageNum, pageSize);
+        return ResponseEntity.ok(memberPage);
     }
 
     // 회원 상세 조회
