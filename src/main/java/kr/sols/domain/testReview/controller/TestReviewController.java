@@ -5,10 +5,7 @@ import kr.sols.auth.annotation.RoleUser;
 import kr.sols.domain.position.dto.PositionCreatedResponse;
 import kr.sols.domain.position.dto.PositionDto;
 import kr.sols.domain.position.service.PositionService;
-import kr.sols.domain.testReview.dto.TestReviewCreatedResponse;
-import kr.sols.domain.testReview.dto.TestReviewDto;
-import kr.sols.domain.testReview.dto.TestReviewListDto;
-import kr.sols.domain.testReview.dto.TestReviewRequest;
+import kr.sols.domain.testReview.dto.*;
 import kr.sols.domain.testReview.service.TestReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +35,11 @@ public class TestReviewController {
     // 코테 후기 전체 조회
     @RoleAdmin
     @GetMapping("/tr")
-    public List<TestReviewListDto> getAllTestReviews() {
-        return testReviewService.getAllTestReviews();
+    public ResponseEntity<TestReviewPageDto> getAllTestReviews(
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "size", defaultValue = "10") Integer pageSize
+    ) {
+        return ResponseEntity.ok(testReviewService.getAllTestReviews(pageNum, pageSize));
     }
 
     // 코테 후기 상세 조회
