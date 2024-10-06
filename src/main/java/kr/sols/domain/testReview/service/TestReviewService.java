@@ -5,18 +5,20 @@ import kr.sols.domain.company.dto.CompanyListDto;
 import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.repository.CompanyRepository;
+import kr.sols.domain.member.dto.MemberListDto;
+import kr.sols.domain.member.dto.MemberPageDto;
 import kr.sols.domain.member.entity.Member;
 import kr.sols.domain.member.exception.MemberException;
 import kr.sols.domain.member.repository.MemberRepository;
 import kr.sols.domain.position.dto.PositionListDto;
-import kr.sols.domain.testReview.dto.TestReviewCreatedResponse;
-import kr.sols.domain.testReview.dto.TestReviewDto;
-import kr.sols.domain.testReview.dto.TestReviewListDto;
-import kr.sols.domain.testReview.dto.TestReviewRequest;
+import kr.sols.domain.testReview.dto.*;
 import kr.sols.domain.testReview.entity.TestReview;
 import kr.sols.domain.testReview.exception.TestReviewException;
 import kr.sols.domain.testReview.repository.TestReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,12 +75,26 @@ public class TestReviewService {
     }
 
     @Transactional(readOnly = true)
-    public List<TestReviewListDto> getAllTestReviews() {
-        List<TestReview> trs = testReviewRepository.findAllByOrderByCreatedDateDesc();
+    public TestReviewPageDto getAllTestReviews(Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Page<TestReview> trPage = testReviewRepository.findAllByOrderByCreatedDateDesc(pageable);
+        int totalPageNum = trPage.getTotalPages();
+        int currentPageNum = trPage.getNumber() + 1;
 
-        return trs.stream()
+        if (currentPageNum > totalPageNum || currentPageNum < 1) throw new TestReviewException(PAGE_NOT_FOUND);
+
+        List<TestReviewListDto> trs = trPage.getContent()
+                .stream()
                 .map(TestReviewListDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
+
+        return TestReviewPageDto.builder()
+                .testReviews(trs)
+                .totalElements((int) trPage.getTotalElements())
+                .totalPages(totalPageNum)
+                .currentPage(currentPageNum)
+                .pageSize(pageSize)
+                .build();
     }
 
     @Transactional(readOnly = true)

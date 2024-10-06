@@ -2,10 +2,7 @@ package kr.sols.domain.suggestion.controller;
 
 import kr.sols.auth.annotation.RoleAdmin;
 import kr.sols.auth.annotation.RoleUser;
-import kr.sols.domain.suggestion.dto.SuggestionCreatedReq;
-import kr.sols.domain.suggestion.dto.SuggestionCreatedRes;
-import kr.sols.domain.suggestion.dto.SuggestionDto;
-import kr.sols.domain.suggestion.dto.SuggestionListDto;
+import kr.sols.domain.suggestion.dto.*;
 import kr.sols.domain.suggestion.entity.Status;
 import kr.sols.domain.suggestion.service.SuggestionService;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +33,12 @@ public class SuggestionController {
 
     @RoleAdmin
     @GetMapping
-    public List<SuggestionListDto> getAllSuggestion() {
-        return suggestionService.getAllSuggestion();
+    public ResponseEntity<SuggestionPageDto> getAllSuggestion(
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "size", defaultValue = "10") Integer pageSize
+    ) {
+        SuggestionPageDto suggestionPage = suggestionService.getAllSuggestion(pageNum, pageSize);
+        return ResponseEntity.ok(suggestionPage);
     }
 
     @RoleAdmin

@@ -5,6 +5,7 @@ import kr.sols.auth.annotation.RoleUser;
 import kr.sols.domain.member.dto.MemberDto;
 import kr.sols.domain.member.dto.MemberEditRequest;
 import kr.sols.domain.member.dto.MemberListDto;
+import kr.sols.domain.member.dto.MemberPageDto;
 import kr.sols.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -55,8 +56,12 @@ public class MemberController {
     // 모든 회원 조회
     @RoleAdmin
     @GetMapping("/list")
-    public List<MemberListDto> getMemberList() {
-        return memberService.getAllMember();
+    public ResponseEntity<MemberPageDto> getMemberList(
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "size", defaultValue = "10") Integer pageSize
+    ) {
+        MemberPageDto memberPage =  memberService.getAllMember(pageNum, pageSize);
+        return ResponseEntity.ok(memberPage);
     }
 
     // 회원 상세 조회

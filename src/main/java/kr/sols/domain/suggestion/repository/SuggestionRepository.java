@@ -2,6 +2,8 @@ package kr.sols.domain.suggestion.repository;
 
 import io.lettuce.core.dynamic.annotation.Param;
 import kr.sols.domain.suggestion.entity.Suggestion;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,7 +19,7 @@ public interface SuggestionRepository extends JpaRepository<Suggestion, UUID> {
             "JOIN FETCH s.position p " +
             "JOIN FETCH p.company c " +
             "ORDER BY s.createdDate DESC")
-    List<Suggestion> findAllWithMembersPositionsAndCompanies();
+    Page<Suggestion> findAllWithMembersPositionsAndCompanies(Pageable pageable);
 
     // 그냥 조회
     @Query("SELECT s FROM Suggestion s " +
