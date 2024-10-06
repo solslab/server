@@ -1,6 +1,8 @@
 package kr.sols.domain.member.service;
 import static kr.sols.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static kr.sols.exception.ErrorCode.PAGE_NOT_FOUND;
 
+import kr.sols.domain.member.dto.MemberPageDto;
 import kr.sols.domain.member.exception.MemberException;
 import kr.sols.domain.member.repository.MemberRepository;
 import kr.sols.domain.member.entity.Member;
@@ -10,7 +12,9 @@ import kr.sols.domain.member.dto.MemberListDto;
 import kr.sols.domain.suggestion.repository.SuggestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +24,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -55,7 +58,6 @@ public class MemberService {
     @Transactional
     public MemberDto memberEdit(MemberEditRequest request, String memberKey) {
         Member member = findByMemberKeyOrThrow(memberKey);
-        System.out.println("alplatform: "+request.getAlPlatform());
         member.updateMember(request);
         return MemberDto.fromEntity(member);
     }
@@ -67,11 +69,26 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<MemberListDto> getAllMember() {
-        List<Member> members = memberRepository.findAllByOrderByCreatedDateDesc();
-        return members.stream()
+    public MemberPageDto getAllMember(Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Page<Member> memberPage = memberRepository.findAllByOrderByCreatedDateDesc(pageable);
+        int totalPageNum = memberPage.getTotalPages();
+        int currentPageNum = memberPage.getNumber() + 1;
+
+        if (currentPageNum > totalPageNum || currentPageNum < 1) throw new MemberException(PAGE_NOT_FOUND);
+
+        List<MemberListDto> members = memberPage.getContent()
+                .stream()
                 .map(MemberListDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
+
+        return MemberPageDto.builder()
+                .members(members)
+                .totalElements((int) memberPage.getTotalElements())
+                .totalPages(totalPageNum)
+                .currentPage(currentPageNum)
+                .pageSize(pageSize)
+                .build();
     }
 
     @Transactional

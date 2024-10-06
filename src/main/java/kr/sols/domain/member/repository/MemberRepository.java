@@ -5,6 +5,9 @@ import kr.sols.domain.member.entity.Member;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
@@ -13,7 +16,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByMemberKey(String memberKey);
 
-    List<Member> findAllByOrderByCreatedDateDesc();
+    Page<Member> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
     void deleteByMemberKey(String memberKey);
 }
