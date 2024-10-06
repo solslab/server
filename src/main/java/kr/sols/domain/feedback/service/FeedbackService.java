@@ -2,15 +2,23 @@ package kr.sols.domain.feedback.service;
 
 import kr.sols.domain.feedback.dto.FeedbackCreatedRes;
 import kr.sols.domain.feedback.dto.FeedbackDto;
-import kr.sols.domain.feedback.dto.FeedbackListDto;
+import kr.sols.domain.feedback.dto.FeedbackPageDto;
 import kr.sols.domain.feedback.entity.Feedback;
+import kr.sols.domain.feedback.exception.FeedbackException;
 import kr.sols.domain.feedback.repository.FeedbackRepository;
+import kr.sols.domain.member.dto.MemberListDto;
+import kr.sols.domain.member.dto.MemberPageDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static kr.sols.exception.ErrorCode.PAGE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -25,20 +33,26 @@ public class FeedbackService {
     }
 
     @Transactional(readOnly = true)
-    public FeedbackListDto getAllFeedbacks() {
-        List<Feedback> feedbacks = feedbackRepository.findAllByOrderByCreatedDateDesc();
+    public FeedbackPageDto getAllFeedbacks(Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Page<Feedback> feedbackPage = feedbackRepository.findAllByOrderByCreatedDateDesc(pageable);
 
-        // 평균 레이팅 계산
-        double averageRating = feedbacks.stream()
-                .mapToInt(Feedback::getRating)
-                .average()
-                .orElse(0.0);
+        int totalPageNum = feedbackPage.getTotalPages();
+        int currentPageNum = feedbackPage.getNumber() + 1;
 
-        List<FeedbackDto> feedbackList = feedbacks.stream()
+        if (currentPageNum > totalPageNum || currentPageNum < 1) throw new FeedbackException(PAGE_NOT_FOUND);
+
+        List<FeedbackDto> feedbacks = feedbackPage.getContent()
+                .stream()
                 .map(FeedbackDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
 
-        // FeedbackListDto 생성 및 반환
-        return new FeedbackListDto(averageRating, feedbackList);
+        return FeedbackPageDto.builder()
+                .feedbacks(feedbacks)
+                .totalElements((int) feedbackPage.getTotalElements())
+                .totalPages(totalPageNum)
+                .currentPage(currentPageNum)
+                .pageSize(pageSize)
+                .build();
     }
 }
