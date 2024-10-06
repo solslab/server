@@ -2,6 +2,8 @@ package kr.sols.domain.company.repository;
 
 import io.lettuce.core.dynamic.annotation.Param;
 import kr.sols.domain.company.entity.Company;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,7 +15,7 @@ import java.util.UUID;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, UUID> {
     boolean existsByCompanyName(String companyName);
-    List<Company> findAllByOrderByCompanyNameAsc();;
+    Page<Company> findAllByOrderByCompanyNameAsc(Pageable pageable);;
     Optional<Company> findById(UUID id);
 
     @Query(value = "SELECT * FROM company c " +
