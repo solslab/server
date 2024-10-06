@@ -1,6 +1,7 @@
 package kr.sols.auth.controller;
 
 //import kr.sols.notification.service.RedisMessageService;
+import jakarta.servlet.http.HttpServletResponse;
 import kr.sols.auth.dto.CheckTokenResponse;
 import kr.sols.auth.dto.LoginResponse;
 import kr.sols.auth.jwt.TokenProvider;
@@ -41,12 +42,12 @@ public class AuthController {
     }
 
     @GetMapping("/auth/check")
-    public ResponseEntity<CheckTokenResponse> checkTokenAndRefresh(@RequestHeader("Authorization") String accessToken) {
+    public ResponseEntity<CheckTokenResponse> checkTokenAndRefresh(@RequestHeader("Authorization") String accessToken, HttpServletResponse response) {
         // "Bearer " 접두사 제거
         String token = accessToken.replace("Bearer ", "");
 
         // 토큰 값으로 서비스 호출
-        return ResponseEntity.ok(authService.checkTokenAndRefresh(token));
+        return ResponseEntity.ok(authService.checkTokenAndRefresh(token, response));
     }
 
 //    @GetMapping("/loginTest")
