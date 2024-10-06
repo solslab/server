@@ -3,9 +3,12 @@ package kr.sols.domain.company.controller;
 import kr.sols.auth.annotation.RoleAdmin;
 import kr.sols.common.TypeValidator;
 import kr.sols.domain.company.dto.*;
+import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.service.CompanyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +43,14 @@ public class CompanyController {
 
     // 기업 전체 조회
     @GetMapping
-    public List<CompanyListDto> getAllCompanies() {
-        return companyService.getAllCompanies();
+    public ResponseEntity<CompanyPageDto> getAllCompanies(
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "size", defaultValue = "10") Integer pageSize
+    ) {
+        CompanyPageDto companyPage = companyService.getAllCompanies(pageNum, pageSize);
+        return ResponseEntity.ok(companyPage);
     }
+
 
     // 기업 수정
     @RoleAdmin

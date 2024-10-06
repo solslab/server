@@ -9,6 +9,9 @@ import kr.sols.domain.position.repository.PositionRepository;
 import kr.sols.domain.position.service.PositionService;
 import kr.sols.s3.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,8 +21,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static kr.sols.exception.ErrorCode.COMPANY_NOT_FOUND;
-import static kr.sols.exception.ErrorCode.DUPLICATED_COMPANY_NAME;
+import static kr.sols.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -45,11 +47,26 @@ public class CompanyService {
     }
 
     @Transactional(readOnly = true)
-    public List<CompanyListDto> getAllCompanies() {
-        List<Company> companies = companyRepository.findAllByOrderByCompanyNameAsc();
-        return companies.stream()
+    public CompanyPageDto getAllCompanies(Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Page<Company> companyPage = companyRepository.findAllByOrderByCompanyNameAsc(pageable);
+        int totalPageNum = companyPage.getTotalPages();
+        int currentPageNum = companyPage.getNumber() + 1;
+
+        if (currentPageNum > totalPageNum || currentPageNum < 1) throw new CompanyException(PAGE_NOT_FOUND);
+
+        List<CompanyListDto> companies = companyPage.getContent()
+                .stream()
                 .map(CompanyListDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
+
+        return CompanyPageDto.builder()
+                .companies(companies)
+                .totalElements((int) companyPage.getTotalElements())
+                .totalPages(totalPageNum)
+                .currentPage(currentPageNum)
+                .pageSize(pageSize)
+                .build();
     }
 
     @Transactional(readOnly = true)
@@ -125,11 +142,11 @@ public class CompanyService {
         }
 
         List<Company> companies = companyRepository.searchCompanyByTerm(searchTerm);
-
         return companies.stream()
                 .map(CompanyListDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
+
 
     @Transactional(readOnly = true)
     public List<CompanyListDto> getRandomCompaniesForHome() {
@@ -137,6 +154,7 @@ public class CompanyService {
 
         return companies.stream()
                 .map(CompanyListDto::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
+
     }
 }
