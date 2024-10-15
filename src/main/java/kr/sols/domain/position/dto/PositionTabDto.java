@@ -13,6 +13,7 @@ import java.util.List;
 public class PositionTabDto {
     private String loginStatus;
     private String positionName;
+    private Boolean isOfficial;
     private List<String> supportLanguages;
     private String testTime;
     private String problemInfo;
@@ -26,6 +27,7 @@ public class PositionTabDto {
     public static PositionTabDto fromDto(PositionDto position, boolean isMember) {
         return PositionTabDto.builder()
                 .loginStatus(isMember ? "signed" : "unsigned")
+                .isOfficial(position.getIsOfficial())
                 .positionName(position.getPositionName())
                 .supportLanguages(position.getSupportLanguages())
                 .testTime(position.getTestTime())

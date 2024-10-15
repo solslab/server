@@ -46,6 +46,7 @@ public class PositionService {
         Position position = Position.builder()
                 .company(targetCompany)
                 .positionName(request.getPositionName())
+                .isOfficial(request.getIsOfficial())
                 .supportLanguages(request.getSupportLanguages())
                 .testTime(request.getTestTime())
                 .problemInfo(request.getProblemInfo())
