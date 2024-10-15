@@ -14,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PositionDto {
     private UUID positionId;
+    private Boolean isOfficial;
     private String positionName;
     private List<String> supportLanguages;
     private String testTime;
@@ -29,6 +30,7 @@ public class PositionDto {
         return PositionDto.builder()
                 .positionId(position.getId())
                 .positionName(position.getPositionName())
+                .isOfficial(position.getIsOfficial())
                 .supportLanguages(position.getSupportLanguages())
                 .testTime(position.getTestTime())
                 .problemInfo(position.getProblemInfo())

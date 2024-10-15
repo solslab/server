@@ -44,6 +44,9 @@ public class Position extends BaseTimeEntity {
     private String testTime;
     private String problemInfo;
 
+    @NotNull(message = "isOfficial cannot be null")
+    private Boolean isOfficial;
+
     @Column(length = 5)
     @Pattern(regexp = "^(가능|불가능)$")
     private String permitIde;
@@ -68,9 +71,10 @@ public class Position extends BaseTimeEntity {
     @Builder
     public Position(Company company, String positionName, List<String> supportLanguages,
                     String testTime, String problemInfo, String permitIde, String permitSearch, String hiddenCase,
-                    String examMode, String testPlace, String note) {
+                    String examMode, String testPlace, String note, Boolean isOfficial) {
         this.company = company;
         this.positionName = positionName;
+        this.isOfficial = isOfficial;
         this.supportLanguages = supportLanguages;
         this.testTime = testTime;
         this.problemInfo = problemInfo;
@@ -98,5 +102,6 @@ public class Position extends BaseTimeEntity {
         this.examMode = request.getExamMode();
         this.testPlace = request.getTestPlace();
         this.note = request.getNote();
+        this.isOfficial = request.getIsOfficial();
     }
 }

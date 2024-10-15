@@ -25,4 +25,5 @@ public class PositionReq {
     private String examMode;
     private String testPlace;
     private String note;
+    private Boolean isOfficial;
 }
