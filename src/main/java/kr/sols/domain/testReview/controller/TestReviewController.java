@@ -2,19 +2,26 @@ package kr.sols.domain.testReview.controller;
 
 import kr.sols.auth.annotation.RoleAdmin;
 import kr.sols.auth.annotation.RoleUser;
+import kr.sols.auth.exception.TokenException;
+import kr.sols.domain.member.exception.MemberException;
 import kr.sols.domain.position.dto.PositionCreatedResponse;
 import kr.sols.domain.position.dto.PositionDto;
 import kr.sols.domain.position.service.PositionService;
 import kr.sols.domain.testReview.dto.*;
+import kr.sols.domain.testReview.exception.TestReviewException;
 import kr.sols.domain.testReview.service.TestReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+
+import static kr.sols.exception.ErrorCode.NO_ACCESS;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +57,15 @@ public class TestReviewController {
     ){
         TestReviewDto res = testReviewService.getTestReview(trId);
         return ResponseEntity.ok(res);
+    }
+
+    // 데이터랩: 기업별 코테 후기 리스트 조회
+    @GetMapping("/tab/datalab/{companyId}")
+    public List<TestReivewDataLabDto> getTestReviewsByCompanyId(
+            @PathVariable UUID companyId
+    ){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return testReviewService.getTestReviewsByCompanyId(companyId, authentication);
     }
 }
