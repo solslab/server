@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,5 +103,28 @@ public class TestReviewService {
         TestReview tr = testReviewRepository.findById(trId).orElseThrow(() -> new TestReviewException(TEST_REVIEW_NOT_FOUND));
 
         return TestReviewDto.fromEntity(tr);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TestReivewDataLabDto> getTestReviewsByCompanyId(UUID companyId, Authentication auth) {
+        List<TestReview> trs = testReviewRepository.findAllByCompanyId(companyId);
+        if (trs.isEmpty()) {
+            throw new TestReviewException(EMPTY_DATALAB);
+        }
+        else if (auth == null) { // 비회원 접근제한
+            throw new TestReviewException(NO_ACCESS);
+        }
+
+        String memberKey = auth.getName();
+        // 인증된 사용자가 해당 회사에 리뷰를 작성했는지 검사
+        boolean isReviewWritten = testReviewRepository.existsByMemberKey(memberKey);
+        if (!isReviewWritten) {
+            throw new TestReviewException(NO_ACCESS);
+        }
+
+
+        return trs.stream()
+                .map(TestReivewDataLabDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }

@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface TestReviewRepository extends JpaRepository<TestReview, UUID> {
     Page<TestReview> findAllByOrderByCreatedDateDesc(Pageable pageable);
     Optional<TestReview> findByMemberKeyAndCompanyId(String memberKey, UUID companyId);
+    List<TestReview> findAllByCompanyId(UUID companyId);
+    boolean existsByMemberKey(String memberKey);
 }

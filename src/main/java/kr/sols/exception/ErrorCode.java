@@ -36,6 +36,7 @@ public enum ErrorCode {
     TEST_REVIEW_NOT_FOUND(NOT_FOUND, "코테 후기를 찾을 수 없습니다."),
     MEMBER_TIER_UNDEFINED(BAD_REQUEST, "회원의 티어 설정이 되지 않았습니다."),
     TR_COMPANY_NOT_MATCH(BAD_REQUEST, "기업 아이디와 기업명이 일치하지 않습니다."),
+    EMPTY_DATALAB(NOT_FOUND, "해당 기업의 데이터가 존재하지 않습니다."),
 
     // suggestion
     SUGGESTION_NOT_FOUND(NOT_FOUND, "정보수정요청을 찾을 수 없습니다."),
