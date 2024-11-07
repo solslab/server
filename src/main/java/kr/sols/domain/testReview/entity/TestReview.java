@@ -53,9 +53,9 @@ public class TestReview extends BaseTimeEntity {
     private int trProblemNum;
 
     @NotNull(message = "푼 문제 수를 입력해주세요")
-    @Min(0)
-    @Max(30)
-    private int trSolvedNum;
+    @DecimalMin(value = "0.0", message = "푼 문제 수는 0 이상이어야 합니다")
+    @DecimalMax(value = "30.0", message = "푼 문제 수는 30 이하이어야 합니다")
+    private float trSolvedNum;
 
     @NotBlank(message = "합격여부를 선택해주세요")
     @Column(length = 3, nullable = false)
