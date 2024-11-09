@@ -19,7 +19,7 @@ public class TestReviewRequest {
     private String trPostion;
     private String trCareer;
     private int trProblemNum;
-    private int trSolvedNum;
+    private float trSolvedNum;
     private String trPassStatus;
     private List<String> trProblemType;
     private String trComment;

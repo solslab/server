@@ -16,7 +16,7 @@ public class TestReivewDataLabDto {
     private String trPosition;
     private String trCareer;
     private int trProblemNum;
-    private int trSolvedNum;
+    private float trSolvedNum;
     private String trPassStatus;
 
     public static TestReivewDataLabDto fromEntity(TestReview testReview) {

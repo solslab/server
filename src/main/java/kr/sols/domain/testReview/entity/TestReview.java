@@ -73,7 +73,7 @@ public class TestReview extends BaseTimeEntity {
 
 
     @Builder
-    public TestReview (UUID id, String memberKey, String memberName, UUID companyId, String companyName, int memberTier, String trYear, String trPosition, String trCareer, int trProblemNum, int trSolvedNum, String trPassStatus, List<String> trProblemType, String trComment) {
+    public TestReview(UUID id, String memberKey, String memberName, UUID companyId, String companyName, int memberTier, String trYear, String trPosition, String trCareer, int trProblemNum, float trSolvedNum, String trPassStatus, List<String> trProblemType, String trComment) {
         this.id = id;
         this.memberKey = memberKey;
         this.memberName = memberName;
