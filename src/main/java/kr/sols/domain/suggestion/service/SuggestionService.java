@@ -68,11 +68,13 @@ public class SuggestionService {
 
         if (currentPageNum > totalPageNum || currentPageNum < 1) throw new SuggestionException(PAGE_NOT_FOUND);
 
+
         List<SuggestionListDto> suggestions = suggestionPage.getContent()
                 .stream()
                 .map(suggestion -> {
                     String memberName = suggestion.getMember().getName();
-                    String companyName = suggestion.getPosition().getCompany().getCompanyName();
+                    Position position = suggestion.getPosition();
+                    String companyName = position.getCompany().getCompanyName();
                     return SuggestionListDto.fromEntity(suggestion, companyName, memberName);
                 })
                 .toList();

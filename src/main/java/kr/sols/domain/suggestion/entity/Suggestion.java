@@ -14,6 +14,9 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(indexes = {
+        @Index(name = "idx_suggestion_created_date", columnList = "created_date")
+})
 public class Suggestion extends BaseTimeEntity {
     @Id
     @GeneratedValue(generator = "uuid2")

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,13 +20,12 @@ public interface SuggestionRepository extends JpaRepository<Suggestion, UUID> {
             "ORDER BY s.createdDate DESC")
     Page<Suggestion> findAllWithMembersPositionsAndCompanies(Pageable pageable);
 
-    // 그냥 조회
+    // 조회
     @Query("SELECT s FROM Suggestion s " +
             "JOIN FETCH s.member m " +
             "JOIN FETCH s.position p " +
             "JOIN FETCH p.company c " +
-            "WHERE s.id = :id " +
-            "ORDER BY s.createdDate DESC")
+            "WHERE s.id = :id")
     Optional<Suggestion> findByIdWithMemberPositionAndCompany(UUID id);
 
 

@@ -35,3 +35,4 @@ cloud:
 logging.level:
   org.springframework.boot.autoconfigure: ERROR
   org.hibernate.SQL: debug
+  org.hibernate.orm.jdbc.bind: trace
