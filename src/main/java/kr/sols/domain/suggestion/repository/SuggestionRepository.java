@@ -1,6 +1,5 @@
 package kr.sols.domain.suggestion.repository;
 
-import io.lettuce.core.dynamic.annotation.Param;
 import kr.sols.domain.suggestion.entity.Suggestion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
