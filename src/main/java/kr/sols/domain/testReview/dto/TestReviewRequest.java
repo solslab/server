@@ -16,7 +16,7 @@ public class TestReviewRequest {
     private UUID companyId;
     private String companyName;
     private String trYear;
-    private String trPostion;
+    private String trPosition;
     private String trCareer;
     private int trProblemNum;
     private float trSolvedNum;

@@ -62,7 +62,7 @@ public class TestReviewService {
                 .companyName(request.getCompanyName())
                 .memberTier(member.getMemberTier())
                 .trYear(request.getTrYear())
-                .trPosition(request.getTrPostion())
+                .trPosition(request.getTrPosition())
                 .trCareer(request.getTrCareer())
                 .trProblemNum(request.getTrProblemNum())
                 .trSolvedNum(request.getTrSolvedNum())
