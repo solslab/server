@@ -75,6 +75,9 @@ public class CompanyService {
     @Transactional(readOnly = true)
     public CompanyDetailDto getCompany(UUID id) {
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
+        if (!company.isPublic()) {
+            throw new CompanyException(COMPANY_NOT_FOUND);
+        }
         List<PositionListDto> positions = positionService.getAllPositionOfCompany(id);
 
         return CompanyDetailDto.fromEntity(company, positions);
