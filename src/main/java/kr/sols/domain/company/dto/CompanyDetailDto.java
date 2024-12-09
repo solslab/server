@@ -19,6 +19,7 @@ public class CompanyDetailDto {
     private List<String> industryType;
     private String companyLogo;
     private List<String> searchTerms;
+    private boolean isPublic;
     private List<PositionListDto> positions; // PositionListDto 목록 추가
 
     public static CompanyDetailDto fromEntity(Company company, List<PositionListDto> positions) {
@@ -27,6 +28,7 @@ public class CompanyDetailDto {
                 .industryType(company.getIndustryType()) // 필요에 따라 변환 가능
                 .companyLogo(company.getCompanyLogo())   // 필요에 따라 변환 가능
                 .searchTerms(company.getSearchTerms())
+                .isPublic(company.isPublic())
                 .positions(positions) // 외부에서 받은 PositionListDto 목록 설정
                 .build();
     }

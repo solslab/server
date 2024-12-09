@@ -30,7 +30,7 @@ public class Company extends BaseTimeEntity {
     private String companyName;
 
     @Convert(converter = StringListConverter.class)
-    @NotEmpty(message = "산업분야를 입력해주세요")
+//    @NotEmpty(message = "산업분야를 입력해주세요")
     private List<String> industryType;
 
     private String companyLogo;
@@ -41,11 +41,14 @@ public class Company extends BaseTimeEntity {
     @Convert(converter = StringListConverter.class)
     private List<String> searchTerms;
 
+    private boolean isPublic = false;
+
     @Builder
-    public Company(String companyName, List<String> industryType, String companyLogo, List<String> searchTerms) {
+    public Company(String companyName, List<String> industryType, String companyLogo, List<String> searchTerms, boolean isPublic) {
         this.companyName = companyName;
         this.industryType = industryType;
         this.companyLogo = companyLogo;
         this.searchTerms = searchTerms;
+        this.isPublic = isPublic;
     }
 }

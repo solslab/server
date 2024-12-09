@@ -32,7 +32,7 @@ public class CompanyController {
     @PostMapping
     public ResponseEntity<CompanyCreatedResponse> createCompany(@RequestBody CompanyRequest companyRequestDto) {
         // 검증 로직
-        if (!TypeValidator.isValidIndustryTypeList(companyRequestDto.getIndustryType())) {
+        if (companyRequestDto.getIndustryType() != null && !TypeValidator.isValidIndustryTypeList(companyRequestDto.getIndustryType())) {
             throw new CompanyException(INVALID_INDUSTRY_TYPE);
         }
 
@@ -94,11 +94,18 @@ public class CompanyController {
     }
 
 
-    // 기업 검색
+    // 등록기업 검색
     @GetMapping("/search")
     public List<CompanyListDto> searchCompanies(
             @RequestParam(value = "q", defaultValue = "") String searchTerm) {
         return companyService.searchCompanies(searchTerm);
+    }
+
+    // 국내기업 전체검색
+    @GetMapping("/searchAll")
+    public List<CompanyListDto> searchAllCompanies(
+            @RequestParam(value = "q", defaultValue = "") String searchTerm) {
+        return companyService.searchAllCompanies(searchTerm);
     }
 
     // 홈화면 - 랜덤 기업 리스트

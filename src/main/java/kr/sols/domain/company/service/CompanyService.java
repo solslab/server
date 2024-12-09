@@ -40,6 +40,7 @@ public class CompanyService {
                 .companyName(request.getCompanyName())
                 .industryType(request.getIndustryType())
                 .searchTerms(request.getSearchTerms())
+                .isPublic(true)
                 .build();
 
         Company savedCompany = companyRepository.save(company);
@@ -137,6 +138,7 @@ public class CompanyService {
         companyRepository.save(company);
     }
 
+    // 등록기업 검색
     @Transactional(readOnly = true)
     public List<CompanyListDto> searchCompanies(String searchTerm) {
         if (searchTerm == null || searchTerm.isBlank()) {
@@ -144,6 +146,19 @@ public class CompanyService {
         }
 
         List<Company> companies = companyRepository.searchCompanyByTerm(searchTerm);
+        return companies.stream()
+                .map(CompanyListDto::fromEntity)
+                .toList();
+    }
+
+    // 국내기업 전체검색
+    @Transactional(readOnly = true)
+    public List<CompanyListDto> searchAllCompanies(String searchTerm) {
+        if (searchTerm == null || searchTerm.isBlank()) {
+            return List.of();
+        }
+
+        List<Company> companies = companyRepository.searchAllCompanyByTerm(searchTerm);
         return companies.stream()
                 .map(CompanyListDto::fromEntity)
                 .toList();
