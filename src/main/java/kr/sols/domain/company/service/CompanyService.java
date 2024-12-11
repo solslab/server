@@ -5,8 +5,11 @@ import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.repository.CompanyRepository;
 import kr.sols.domain.position.dto.PositionListDto;
+import kr.sols.domain.position.entity.Position;
 import kr.sols.domain.position.repository.PositionRepository;
 import kr.sols.domain.position.service.PositionService;
+import kr.sols.domain.testReview.repository.TestReviewRepository;
+import kr.sols.domain.testReview.service.TestReviewService;
 import kr.sols.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,8 +31,8 @@ import static kr.sols.exception.ErrorCode.*;
 public class CompanyService {
     private final S3Service s3Service;
     private final CompanyRepository companyRepository;
-    private final PositionService positionService;
     private final PositionRepository positionRepository;
+    private final TestReviewRepository testReviewRepository;
 
     @Transactional
     public CompanyCreatedResponse createCompany(CompanyRequest request) {
@@ -78,9 +81,12 @@ public class CompanyService {
         if (!company.isPublic()) {
             throw new CompanyException(COMPANY_NOT_FOUND);
         }
-        List<PositionListDto> positions = positionService.getAllPositionOfCompany(id);
+        List<Position> positions = positionRepository.findAllByCompanyIdOrderByCreatedDateDesc(id);
+        List<PositionListDto> positionDtos = positions.stream()
+                .map(PositionListDto::fromEntity)
+                .collect(Collectors.toList());
 
-        return CompanyDetailDto.fromEntity(company, positions);
+        return CompanyDetailDto.fromEntity(company, positionDtos);
     }
 
     @Transactional
@@ -176,5 +182,18 @@ public class CompanyService {
                 .map(CompanyListDto::fromEntity)
                 .toList();
 
+    }
+
+    @Transactional
+    public void updateCompanyStatus(UUID companyId) {
+        long reviewCount = testReviewRepository.countByCompanyId(companyId);
+        long positionCount = positionRepository.countByCompanyId(companyId);
+        System.out.println(reviewCount);
+        System.out.println(positionCount);
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
+
+        company.updatePublicStatus(reviewCount, positionCount);
+        companyRepository.save(company);
     }
 }

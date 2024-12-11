@@ -4,6 +4,7 @@ import kr.sols.common.TypeValidator;
 import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.repository.CompanyRepository;
+import kr.sols.domain.company.service.CompanyService;
 import kr.sols.domain.member.dto.MemberDto;
 import kr.sols.domain.member.entity.Member;
 import kr.sols.domain.position.Exception.PositionException;
@@ -29,6 +30,7 @@ import static kr.sols.exception.ErrorCode.*;
 public class PositionService {
     private final CompanyRepository companyRepository;
     private final PositionRepository positionRepository;
+    private final CompanyService companyService;
 
     @Transactional
     public PositionCreatedResponse createPosition(UUID companyId, PositionReq request) {
@@ -59,6 +61,8 @@ public class PositionService {
                 .build();
 
         Position savedPosition = positionRepository.save(position);
+        companyService.updateCompanyStatus(companyId);
+
         return new PositionCreatedResponse(savedPosition.getId());
     }
 
@@ -89,12 +93,14 @@ public class PositionService {
 
     @Transactional
     public void deletePosition(UUID positionId) {
-        // Check if the position exists
-        if (!positionRepository.existsById(positionId)) {
-            throw new PositionException(POSITION_NOT_FOUND);
-        }
+        Position position = positionRepository.findById(positionId).orElseThrow(()-> new PositionException(POSITION_NOT_FOUND));
 
-        // Delete the position
         positionRepository.deleteById(positionId);
+        companyService.updateCompanyStatus(position.getCompany().getId());
+    }
+
+    @Transactional
+    public long countPositionsByCompanyId(UUID companyId) {
+        return positionRepository.countByCompanyId(companyId);
     }
 }

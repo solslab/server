@@ -5,6 +5,7 @@ import kr.sols.domain.company.dto.CompanyListDto;
 import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.repository.CompanyRepository;
+import kr.sols.domain.company.service.CompanyService;
 import kr.sols.domain.member.dto.MemberListDto;
 import kr.sols.domain.member.dto.MemberPageDto;
 import kr.sols.domain.member.entity.Member;
@@ -37,6 +38,7 @@ public class TestReviewService {
     private final MemberRepository memberRepository;
     private final TestReviewRepository testReviewRepository;
     private final CompanyRepository companyRepository;
+    private final CompanyService companyService;
 
     @Transactional
     public TestReviewCreatedResponse createTestReview(TestReviewRequest request, String memberKey) {
@@ -72,6 +74,10 @@ public class TestReviewService {
                 .build();
 
         TestReview savedTestReview = testReviewRepository.save(testReview);
+        if (request.getCompanyId() != null) {
+            companyService.updateCompanyStatus(request.getCompanyId());
+        }
+
         return new TestReviewCreatedResponse(savedTestReview.getId());
     }
 
@@ -126,5 +132,10 @@ public class TestReviewService {
         return trs.stream()
                 .map(TestReivewDataLabDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public long countTestReviewsByCompanyId(UUID companyId) {
+        return testReviewRepository.countByCompanyId(companyId);
     }
 }

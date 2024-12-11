@@ -51,4 +51,8 @@ public class Company extends BaseTimeEntity {
         this.searchTerms = searchTerms;
         this.isPublic = isPublic;
     }
+
+    public void updatePublicStatus(long reviewCount, long infoCount) {
+        this.isPublic = reviewCount > 0 || infoCount > 0;
+    }
 }
