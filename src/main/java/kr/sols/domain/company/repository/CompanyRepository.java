@@ -15,7 +15,7 @@ import java.util.UUID;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, UUID> {
     boolean existsByCompanyName(String companyName);
-    Page<Company> findAllByOrderByCompanyNameAsc(Pageable pageable);;
+    Page<Company> findAllByIsPublicTrueOrderByCompanyNameAsc(Pageable pageable);;
     Optional<Company> findById(UUID id);
 
     // 등록기업 검색
@@ -40,7 +40,7 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
 
     @Query(value = "SELECT * FROM company c " +
             "WHERE c.is_public IS TRUE " +
-            " ORDER BY RAND() LIMIT 15",
+            "ORDER BY RAND() LIMIT 15",
             nativeQuery = true)
     List<Company> findRandomCompaniesForHome();
 

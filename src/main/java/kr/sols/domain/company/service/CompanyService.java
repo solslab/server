@@ -50,7 +50,7 @@ public class CompanyService {
     @Transactional(readOnly = true)
     public CompanyPageDto getAllCompanies(Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Page<Company> companyPage = companyRepository.findAllByOrderByCompanyNameAsc(pageable);
+        Page<Company> companyPage = companyRepository.findAllByIsPublicTrueOrderByCompanyNameAsc(pageable);
 
         int totalPageNum = companyPage.getTotalPages();
         int currentPageNum = companyPage.getNumber() + 1;
