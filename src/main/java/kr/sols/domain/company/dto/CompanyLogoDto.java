@@ -8,9 +8,6 @@ import lombok.Setter;
 public class CompanyLogoDto {
     private String companyLogo;
 
-    public CompanyLogoDto() {
-    }
-
     public CompanyLogoDto(String companyLogo) {
         this.companyLogo = companyLogo;
     }

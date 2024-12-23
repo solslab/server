@@ -15,4 +15,5 @@ public class CompanyRequest {
     private String companyName;
     private List<String> industryType;
     private List<String> searchTerms;
+    private boolean isPublic;
 }

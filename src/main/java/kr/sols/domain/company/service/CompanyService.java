@@ -43,7 +43,7 @@ public class CompanyService {
                 .companyName(request.getCompanyName())
                 .industryType(request.getIndustryType())
                 .searchTerms(request.getSearchTerms())
-                .isPublic(true)
+                .isPublic(request.isPublic())
                 .build();
 
         Company savedCompany = companyRepository.save(company);
@@ -95,6 +95,7 @@ public class CompanyService {
         company.setCompanyName(request.getCompanyName());
         company.setIndustryType(request.getIndustryType());
         company.setSearchTerms(request.getSearchTerms());
+        company.setPublic(request.isPublic());
 
         Company updatedCompany = companyRepository.save(company);
         return new CompanyCreatedResponse(updatedCompany.getId());
