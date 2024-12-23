@@ -1,9 +1,11 @@
 package kr.sols.auth.service;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.sols.auth.dto.CheckTokenResponse;
 import kr.sols.auth.exception.TokenException;
 import kr.sols.auth.jwt.TokenProvider;
+import kr.sols.domain.member.entity.Role;
 import kr.sols.exception.ErrorCode;
 import kr.sols.redis.Token;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +19,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
     private final TokenProvider tokenProvider;
     private final TokenService tokenService;
+
     @Transactional
     public CheckTokenResponse checkTokenAndRefresh(String accessToken, HttpServletResponse response) {
+
         if (tokenProvider.validateToken(accessToken)) {  // 액세스 토큰 유효
-            return new CheckTokenResponse("validate");
+            Claims claims = tokenProvider.parseClaims(accessToken);
+            String role = claims.get("role", String.class);
+            if (role != null && role.startsWith("ROLE_")) {
+                role = role.replaceFirst("ROLE_", "");
+            }
+            return new CheckTokenResponse("validate", role);
         }
         else { // 액세스 토큰 만료됨
             Token token = tokenService.findByAccessTokenOrThrow(accessToken);
@@ -33,9 +42,10 @@ public class AuthService {
                 if (reissueAccessToken != null && !reissueAccessToken.isEmpty()) {
                     response.setHeader("Authorization", "Bearer " + reissueAccessToken);
                 }
-                return new CheckTokenResponse("invalidate");
+                return new CheckTokenResponse("invalidate", null);
             }
             else throw new TokenException(ErrorCode.TOKEN_EXPIRED);
         }
     }
+
 }

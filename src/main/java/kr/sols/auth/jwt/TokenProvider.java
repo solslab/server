@@ -110,7 +110,7 @@ public class TokenProvider {
         return claims.getExpiration().after(new Date());
     }
 
-    private Claims parseClaims(String token) {
+    public Claims parseClaims(String token) {
         try {
             return Jwts.parser().verifyWith(secretKey).build()
                     .parseSignedClaims(token).getPayload();
