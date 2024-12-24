@@ -104,18 +104,26 @@ public class CompanyController {
     }
 
 
-    // 등록기업 검색
+    // 공개 기업 검색
     @GetMapping("/search")
     public List<CompanyListDto> searchCompanies(
             @RequestParam(value = "q", defaultValue = "") String searchTerm) {
         return companyService.searchCompanies(searchTerm);
     }
 
-    // 국내기업 전체검색
+    // 국내 기업 전체검색
     @GetMapping("/searchAll")
     public List<CompanyListDto> searchAllCompanies(
             @RequestParam(value = "q", defaultValue = "") String searchTerm) {
         return companyService.searchAllCompanies(searchTerm);
+    }
+
+    // 비공개 기업 검색
+    @RoleAdmin
+    @GetMapping("/search-private")
+    public List<CompanyListDto> searchPrivateCompanies(
+            @RequestParam(value = "q", defaultValue = "") String searchTerm) {
+        return companyService.searchPrivateCompanies(searchTerm);
     }
 
     // 홈화면 - 랜덤 기업 리스트

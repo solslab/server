@@ -19,7 +19,7 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
     Page<Company> findAllByIsPublicFalseOrderByCompanyNameAsc(Pageable pageable);
     Optional<Company> findById(UUID id);
 
-    // 등록기업 검색
+    // 공개 기업 검색
     @Query(value = "SELECT * FROM company c " +
             "WHERE (c.company_name LIKE CONCAT(:searchTerm, '%') " +
             "AND c.is_public IS TRUE) " +
@@ -29,7 +29,7 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
             nativeQuery = true)
     List<Company> searchCompanyByTerm(@Param("searchTerm") String searchTerm);
 
-    // 국내기업 전체 검색
+    // 기업 전체 검색
     @Query(value = "SELECT * FROM company c " +
             "WHERE (c.company_name LIKE CONCAT(:searchTerm, '%') " +
             "OR EXISTS (SELECT 1 FROM JSON_TABLE(c.search_terms, '$[*]' COLUMNS(term VARCHAR(255) PATH '$')) AS jt " +
@@ -37,6 +37,16 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
             "ORDER BY c.company_name",
             nativeQuery = true)
     List<Company> searchAllCompanyByTerm(@Param("searchTerm") String searchTerm);
+
+    // 비공개 기업 검색
+    @Query(value = "SELECT * FROM company c " +
+            "WHERE (c.company_name LIKE CONCAT(:searchTerm, '%') " +
+            "AND c.is_public IS FALSE) " +
+            "OR EXISTS (SELECT 1 FROM JSON_TABLE(c.search_terms, '$[*]' COLUMNS(term VARCHAR(255) PATH '$')) AS jt " +
+            "WHERE jt.term LIKE CONCAT(:searchTerm, '%')) " +
+            "ORDER BY c.company_name",
+            nativeQuery = true)
+    List<Company> searchPrivateCompanyByTerm(@Param("searchTerm") String searchTerm);
 
 
     @Query(value = "SELECT * FROM company c " +

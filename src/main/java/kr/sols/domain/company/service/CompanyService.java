@@ -173,7 +173,7 @@ public class CompanyService {
         companyRepository.save(company);
     }
 
-    // 등록기업 검색
+    // 공개 기업 검색
     @Transactional(readOnly = true)
     public List<CompanyListDto> searchCompanies(String searchTerm) {
         if (searchTerm == null || searchTerm.isBlank()) {
@@ -194,6 +194,19 @@ public class CompanyService {
         }
 
         List<Company> companies = companyRepository.searchAllCompanyByTerm(searchTerm);
+        return companies.stream()
+                .map(CompanyListDto::fromEntity)
+                .toList();
+    }
+
+    // 비공개 기업 검색
+    @Transactional(readOnly = true)
+    public List<CompanyListDto> searchPrivateCompanies(String searchTerm) {
+        if (searchTerm == null || searchTerm.isBlank()) {
+            return List.of();
+        }
+
+        List<Company> companies = companyRepository.searchPrivateCompanyByTerm(searchTerm);
         return companies.stream()
                 .map(CompanyListDto::fromEntity)
                 .toList();
