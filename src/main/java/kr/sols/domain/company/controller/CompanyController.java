@@ -51,6 +51,15 @@ public class CompanyController {
         return ResponseEntity.ok(companyPage);
     }
 
+    @GetMapping
+    public ResponseEntity<CompanyPageDto> getAllPrivateCompanies(
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "size", defaultValue = "10") Integer pageSize
+    ) {
+        CompanyPageDto companyPage = companyService.getAllPrivateCompanies(pageNum, pageSize);
+        return ResponseEntity.ok(companyPage);
+    }
+
 
     // 기업 수정
     @RoleAdmin

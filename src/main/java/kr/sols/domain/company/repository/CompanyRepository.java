@@ -15,7 +15,8 @@ import java.util.UUID;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, UUID> {
     boolean existsByCompanyName(String companyName);
-    Page<Company> findAllByIsPublicTrueOrderByCompanyNameAsc(Pageable pageable);;
+    Page<Company> findAllByIsPublicTrueOrderByCompanyNameAsc(Pageable pageable);
+    Page<Company> findAllByIsPublicFalseOrderByCompanyNameAsc(Pageable pageable);
     Optional<Company> findById(UUID id);
 
     // 등록기업 검색

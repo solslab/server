@@ -76,6 +76,31 @@ public class CompanyService {
     }
 
     @Transactional(readOnly = true)
+    public CompanyPageDto getAllPrivateCompanies(Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Page<Company> companyPage = companyRepository.findAllByIsPublicFalseOrderByCompanyNameAsc(pageable);
+
+        int totalPageNum = companyPage.getTotalPages();
+        int currentPageNum = companyPage.getNumber() + 1;
+
+
+        if (currentPageNum > totalPageNum || currentPageNum < 1) throw new CompanyException(PAGE_NOT_FOUND);
+
+        List<CompanyListDto> companies = companyPage.getContent()
+                .stream()
+                .map(CompanyListDto::fromEntity)
+                .toList();
+
+        return CompanyPageDto.builder()
+                .companies(companies)
+                .totalElements((int) companyPage.getTotalElements())
+                .totalPages(totalPageNum)
+                .currentPage(currentPageNum)
+                .pageSize(pageSize)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
     public CompanyDetailDto getCompany(UUID id) {
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
         if (!company.isPublic()) {
