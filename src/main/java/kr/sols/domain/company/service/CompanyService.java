@@ -103,9 +103,9 @@ public class CompanyService {
     @Transactional(readOnly = true)
     public CompanyDetailDto getCompany(UUID id) {
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
-        if (!company.isPublic()) {
-            throw new CompanyException(COMPANY_NOT_FOUND);
-        }
+//        if (!company.isPublic()) {
+//            throw new CompanyException(COMPANY_NOT_FOUND);
+//        }
         List<Position> positions = positionRepository.findAllByCompanyIdOrderByCreatedDateDesc(id);
         List<PositionListDto> positionDtos = positions.stream()
                 .map(PositionListDto::fromEntity)
