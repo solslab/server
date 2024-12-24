@@ -51,7 +51,8 @@ public class CompanyController {
         return ResponseEntity.ok(companyPage);
     }
 
-    @GetMapping
+    @RoleAdmin
+    @GetMapping("/private")
     public ResponseEntity<CompanyPageDto> getAllPrivateCompanies(
             @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "size", defaultValue = "10") Integer pageSize
