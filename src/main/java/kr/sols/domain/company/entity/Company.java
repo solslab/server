@@ -41,7 +41,7 @@ public class Company extends BaseTimeEntity {
     @Convert(converter = StringListConverter.class)
     private List<String> searchTerms;
 
-    private boolean isPublic = false;
+    private boolean isPublic;
 
     @Builder
     public Company(String companyName, List<String> industryType, String companyLogo, List<String> searchTerms, boolean isPublic) {
