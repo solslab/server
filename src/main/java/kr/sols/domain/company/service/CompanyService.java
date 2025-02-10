@@ -7,9 +7,7 @@ import kr.sols.domain.company.repository.CompanyRepository;
 import kr.sols.domain.position.dto.PositionListDto;
 import kr.sols.domain.position.entity.Position;
 import kr.sols.domain.position.repository.PositionRepository;
-import kr.sols.domain.position.service.PositionService;
 import kr.sols.domain.testReview.repository.TestReviewRepository;
-import kr.sols.domain.testReview.service.TestReviewService;
 import kr.sols.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,7 +33,7 @@ public class CompanyService {
     private final TestReviewRepository testReviewRepository;
 
     @Transactional
-    public CompanyCreatedResponse createCompany(CompanyRequest request) {
+    public CompanyIdDto createCompany(CompanyRequest request) {
         if (companyRepository.existsByCompanyName(request.getCompanyName())) {
             throw new CompanyException(DUPLICATED_COMPANY_NAME);
         }
@@ -47,7 +45,7 @@ public class CompanyService {
                 .build();
 
         Company savedCompany = companyRepository.save(company);
-        return new CompanyCreatedResponse(savedCompany.getId());
+        return new CompanyIdDto(savedCompany.getId());
     }
 
     @Transactional(readOnly = true)
@@ -115,7 +113,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public CompanyCreatedResponse updateCompany(UUID id, CompanyRequest request) {
+    public CompanyIdDto updateCompany(UUID id, CompanyRequest request) {
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
         company.setCompanyName(request.getCompanyName());
         company.setIndustryType(request.getIndustryType());
@@ -123,7 +121,7 @@ public class CompanyService {
         company.setPublic(request.isPublic());
 
         Company updatedCompany = companyRepository.save(company);
-        return new CompanyCreatedResponse(updatedCompany.getId());
+        return new CompanyIdDto(updatedCompany.getId());
     }
 
     @Transactional
@@ -227,12 +225,18 @@ public class CompanyService {
     public void updateCompanyStatus(UUID companyId) {
         long reviewCount = testReviewRepository.countByCompanyId(companyId);
         long positionCount = positionRepository.countByCompanyId(companyId);
-        System.out.println(reviewCount);
-        System.out.println(positionCount);
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
 
         company.updatePublicStatus(reviewCount, positionCount);
         companyRepository.save(company);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CompanyIdDto> getAllPublicCompanyId() {
+        List<Company> companies = companyRepository.getAllPublicCompanyId();
+        return companies.stream()
+                .map(CompanyIdDto::fromEntity)
+                .toList();
     }
 }

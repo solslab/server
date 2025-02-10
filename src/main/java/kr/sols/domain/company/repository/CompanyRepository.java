@@ -59,4 +59,6 @@ public interface CompanyRepository extends JpaRepository<Company, UUID> {
             nativeQuery = true)
     List<Company> findRandomCompaniesForHome();
 
+    @Query(value = "SELECT * FROM company c WHERE c.is_public = TRUE", nativeQuery = true)
+    List<Company> getAllPublicCompanyId();
 }

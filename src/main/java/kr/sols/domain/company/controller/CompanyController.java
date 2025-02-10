@@ -3,12 +3,9 @@ package kr.sols.domain.company.controller;
 import kr.sols.auth.annotation.RoleAdmin;
 import kr.sols.common.TypeValidator;
 import kr.sols.domain.company.dto.*;
-import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.company.exception.CompanyException;
 import kr.sols.domain.company.service.CompanyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +27,14 @@ public class CompanyController {
     // 기업 생성
     @RoleAdmin
     @PostMapping
-    public ResponseEntity<CompanyCreatedResponse> createCompany(@RequestBody CompanyRequest companyRequestDto) {
+    public ResponseEntity<CompanyIdDto> createCompany(@RequestBody CompanyRequest companyRequestDto) {
         // 검증 로직
         if (companyRequestDto.getIndustryType() != null && !TypeValidator.isValidIndustryTypeList(companyRequestDto.getIndustryType())) {
             throw new CompanyException(INVALID_INDUSTRY_TYPE);
         }
 
         // 회사 생성 로직
-        CompanyCreatedResponse createdCompany = companyService.createCompany(companyRequestDto);
+        CompanyIdDto createdCompany = companyService.createCompany(companyRequestDto);
         return ResponseEntity.ok(createdCompany);
     }
 
@@ -65,8 +62,8 @@ public class CompanyController {
     // 기업 수정
     @RoleAdmin
     @PutMapping("/{id}")
-    public ResponseEntity<CompanyCreatedResponse> updateCompany(@PathVariable UUID id, @RequestBody CompanyRequest companyRequestDto) {
-        CompanyCreatedResponse updatedCompany = companyService.updateCompany(id, companyRequestDto);
+    public ResponseEntity<CompanyIdDto> updateCompany(@PathVariable UUID id, @RequestBody CompanyRequest companyRequestDto) {
+        CompanyIdDto updatedCompany = companyService.updateCompany(id, companyRequestDto);
         return ResponseEntity.ok(updatedCompany);
     }
 
@@ -130,5 +127,10 @@ public class CompanyController {
     @GetMapping("/home-random")
     public List<CompanyListDto> getRandomCompaniesForHome() {
         return companyService.getRandomCompaniesForHome();
+    }
+
+    @GetMapping("/ids")
+    public List<CompanyIdDto> getAllPublicCompanyId() {
+        return companyService.getAllPublicCompanyId();
     }
 }
