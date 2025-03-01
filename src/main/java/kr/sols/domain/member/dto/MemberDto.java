@@ -1,5 +1,4 @@
 package kr.sols.domain.member.dto;
-import kr.sols.domain.member.entity.AlPlatform;
 import kr.sols.domain.member.entity.SocialType;
 import kr.sols.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
@@ -7,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static kr.sols.common.FormatDate.formatDate;
@@ -21,7 +18,6 @@ public class MemberDto {
     private String name;
     private String nickname;
     private String email;
-    private AlPlatform alPlatform;
     private Integer memberTier;
     private List<String> preferLanguages;
     private List<String> preferIndustries;
@@ -33,7 +29,6 @@ public class MemberDto {
                 .name(member.getName())
                 .nickname(member.getNickname())
                 .email(member.getEmail())
-                .alPlatform(member.getAlPlatform())
                 .memberTier(member.getMemberTier())
                 .preferLanguages(parseList(member.getPreferLanguages()))
                 .preferIndustries(parseList(member.getPreferIndustries()))
