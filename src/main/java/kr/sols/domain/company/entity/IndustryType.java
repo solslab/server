@@ -12,7 +12,8 @@ public enum IndustryType {
     MAJOR("대기업"),
     MEDIUM("중견기업"),
     SMALL("중소기업"),
-    PUBLIC("공기업");
+    PUBLIC("공기업"),
+    EDUCATION("교육기관");
 
     private final String description;
 
