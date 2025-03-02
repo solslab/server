@@ -70,6 +70,7 @@ public class TestReviewService {
                 .trSolvedNum(request.getTrSolvedNum())
                 .trPassStatus(request.getTrPassStatus())
                 .trProblemType(request.getTrProblemType())
+                .difficulty(request.getDifficulty())
                 .trComment(request.getTrComment())
                 .build();
 

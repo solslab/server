@@ -35,6 +35,7 @@ public class TestReviewController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody TestReviewRequest request
     ) {
+        System.out.println(request.getDifficulty());
         TestReviewCreatedResponse res = testReviewService.createTestReview(request, userDetails.getUsername());
         return ResponseEntity.ok(res);
     }

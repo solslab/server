@@ -28,6 +28,7 @@ public class TestReviewDto {
     private float trSolvedNum;
     private String trPassStatus;
     private List<String> trProblemType;
+    private Integer difficulty;
     private String trComment;
     private String createdDate;
 
@@ -43,6 +44,7 @@ public class TestReviewDto {
                 .trSolvedNum(testReview.getTrSolvedNum())
                 .trPassStatus(testReview.getTrPassStatus())
                 .trProblemType(testReview.getTrProblemType())
+                .difficulty(testReview.getDifficulty())
                 .trComment(testReview.getTrComment())
                 .createdDate(formatDate(testReview.getCreatedDate()))
                 .build();

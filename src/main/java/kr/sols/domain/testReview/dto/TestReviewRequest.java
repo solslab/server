@@ -22,5 +22,6 @@ public class TestReviewRequest {
     private float trSolvedNum;
     private String trPassStatus;
     private List<String> trProblemType;
+    private Integer difficulty;
     private String trComment;
 }
