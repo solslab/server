@@ -118,6 +118,12 @@ public class TestReviewService {
         if (trs.isEmpty()) {
             throw new TestReviewException(EMPTY_DATALAB);
         }
+
+        boolean hasPassed = trs.stream().anyMatch(tr -> "합격".equals(tr.getTrPassStatus()));
+        if (!hasPassed) {
+            throw new TestReviewException(EMPTY_DATALAB);
+        }
+
         else if (auth == null) { // 비회원 접근제한
             throw new TestReviewException(NO_ACCESS);
         }

@@ -45,7 +45,7 @@ public class TestReview extends BaseTimeEntity {
 
     @NotBlank(message = "경력구분을 선택해주세요")
     @Column(length = 2)
-    @Pattern(regexp = "^(신입|인턴|경력)$")
+    @Pattern(regexp = "^(신입|경력)$")
     private String trCareer;
 
     @NotNull(message = "총 문제 수를 입력해주세요")
@@ -60,7 +60,7 @@ public class TestReview extends BaseTimeEntity {
 
     @NotBlank(message = "합격여부를 선택해주세요")
     @Column(length = 3, nullable = false)
-    @Pattern(regexp = "^(합격|불합격|대기중)$")
+    @Pattern(regexp = "^(합격|불합격)$")
     private String trPassStatus;
 
     @Convert(converter = StringListConverter.class)
@@ -74,7 +74,7 @@ public class TestReview extends BaseTimeEntity {
     @NotNull(message = "난이도를 입력해주세요")
     private Integer difficulty;
 
-    @NotBlank(message = "한줄리뷰를 입력해주세요")
+    @NotBlank(message = "한줄후기를 입력해주세요")
     @Column(length = 100, nullable = false)
     private String trComment;
 
