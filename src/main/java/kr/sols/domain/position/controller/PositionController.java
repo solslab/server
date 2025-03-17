@@ -67,7 +67,7 @@ public class PositionController {
     }
 
     // 기업 탭 - 직무별 코테정보 조회
-    @GetMapping("tab/testInfo/{positionId}")
+    @GetMapping("/tab/testInfo/{positionId}")
     public ResponseEntity<PositionTabDto> getPositionInfo(@PathVariable("positionId") UUID positionId) {
         // 인증 상태 확인
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -81,5 +81,12 @@ public class PositionController {
         }
 
         return ResponseEntity.ok(positionTabDto);
+    }
+
+    // dev test - 직무별 코테정보 조회
+    @GetMapping("/dev/testInfo/{positionId}")
+    public ResponseEntity<PositionDto> getPositionInfoDev(@PathVariable("positionId") UUID positionId) {
+        PositionDto positionDto = positionService.getPosition(positionId);
+        return ResponseEntity.ok(positionDto);
     }
 }
