@@ -8,12 +8,10 @@ import kr.sols.domain.company.service.CompanyService;
 import kr.sols.domain.member.dto.MemberDto;
 import kr.sols.domain.member.entity.Member;
 import kr.sols.domain.position.Exception.PositionException;
-import kr.sols.domain.position.dto.PositionCreatedResponse;
-import kr.sols.domain.position.dto.PositionDto;
-import kr.sols.domain.position.dto.PositionListDto;
-import kr.sols.domain.position.dto.PositionReq;
+import kr.sols.domain.position.dto.*;
 import kr.sols.domain.position.entity.Position;
 import kr.sols.domain.position.repository.PositionRepository;
+import kr.sols.domain.position.repository.projection.SupportLanguagesProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +32,6 @@ public class PositionService {
 
     @Transactional
     public PositionCreatedResponse createPosition(UUID companyId, PositionReq request) {
-        // 검증 로직
         Company targetCompany = companyRepository.findById(companyId).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
         if (positionRepository.existsByCompanyIdAndPositionName(companyId, request.getPositionName())) {
             throw new PositionException(DUPLICATED_POSITION_NAME);
@@ -44,7 +41,6 @@ public class PositionService {
             throw new PositionException(INVALID_LANGUAGE_TYPE);
         }
 
-        // 생성
         Position position = Position.builder()
                 .company(targetCompany)
                 .positionName(request.getPositionName())
@@ -73,15 +69,6 @@ public class PositionService {
         return position.map(PositionDto::fromEntity).orElseThrow(() -> new PositionException(POSITION_NOT_FOUND));
     }
 
-    @Transactional(readOnly = true)
-    public List<PositionListDto> getAllPositionOfCompany(UUID companyId) {
-        companyRepository.findById(companyId).orElseThrow(()-> new CompanyException(COMPANY_NOT_FOUND));
-        List<Position> positions = positionRepository.findAllByCompanyIdOrderByCreatedDateDesc(companyId);
-        return positions.stream()
-                .map(PositionListDto::fromEntity)
-                .collect(Collectors.toList());
-    }
-
 
     @Transactional
     public PositionDto updatePosition(UUID positionId, PositionReq request) {
@@ -100,7 +87,9 @@ public class PositionService {
     }
 
     @Transactional
-    public long countPositionsByCompanyId(UUID companyId) {
-        return positionRepository.countByCompanyId(companyId);
+    public SupportLanguagesProjection getSupportLanguages(UUID positionId) {
+        return positionRepository.findSupportLanguagesById(positionId)
+                .orElseThrow(() -> new PositionException(POSITION_NOT_FOUND));
     }
+
 }

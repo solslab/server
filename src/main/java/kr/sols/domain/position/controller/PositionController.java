@@ -3,6 +3,7 @@ package kr.sols.domain.position.controller;
 import kr.sols.auth.annotation.RoleAdmin;
 import kr.sols.auth.annotation.RoleUser;
 import kr.sols.domain.position.dto.*;
+import kr.sols.domain.position.repository.projection.SupportLanguagesProjection;
 import kr.sols.domain.position.service.PositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,14 +32,6 @@ public class PositionController {
         PositionCreatedResponse createdPosition = positionService.createPosition(companyId, request);
         return ResponseEntity.ok(createdPosition);
     }
-
-    // 특정 기업의 직무 조회
-//    @GetMapping("/company/{companyId}/position")
-//    public List<PositionListDto> getAllPositionOfCompany(
-//            @PathVariable UUID companyId
-//    ) {
-//        return positionService.getAllPositionOfCompany(companyId);
-//    }
 
     // 직무 상세조회
     @RoleAdmin
@@ -89,4 +82,11 @@ public class PositionController {
         PositionDto positionDto = positionService.getPosition(positionId);
         return ResponseEntity.ok(positionDto);
     }
+
+    // dev test - 응시언어 조회
+    @GetMapping("/dev/languages/{positionId}")
+    public SupportLanguagesProjection getSupportLanguagesDev(@PathVariable("positionId") UUID positionId) {
+        return positionService.getSupportLanguages(positionId);
+    }
+
 }
