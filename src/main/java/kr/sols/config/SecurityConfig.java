@@ -1,13 +1,9 @@
 package kr.sols.config;
 
-import com.amazonaws.HttpMethod;
 import kr.sols.auth.handler.CustomAccessDeniedHandler;
 import kr.sols.auth.handler.CustomAuthenticationEntryPoint;
-import kr.sols.auth.handler.OAuth2FailureHandler;
-import kr.sols.auth.handler.OAuth2SuccessHandler;
 import kr.sols.auth.jwt.TokenAuthenticationFilter;
 import kr.sols.auth.jwt.TokenExceptionFilter;
-import kr.sols.auth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,10 +22,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.Collections;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @RequiredArgsConstructor
 @Configuration
@@ -38,8 +31,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     // 서비스 주입
-    private final CustomOAuth2UserService oAuth2UserService;
-    private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
     @Bean
@@ -85,21 +76,14 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/**"),
                                 new AntPathRequestMatcher("/auth/success"),
                                 new AntPathRequestMatcher("/auth/check"),
+                                new AntPathRequestMatcher("/auth/kakao/**"),
                                 new AntPathRequestMatcher("/company/**", "GET"),
                                 new AntPathRequestMatcher("/admin/login"),
+                                new AntPathRequestMatcher("/admin", "POST"),
                                 new AntPathRequestMatcher("/feedback", "POST"),
-                                new AntPathRequestMatcher("/dev/**"),
-                                new AntPathRequestMatcher("/loginTest")
+                                new AntPathRequestMatcher("/dev/**")
                         ).permitAll()
                         .anyRequest().authenticated()
-                )
-
-
-                // OAuth2 로그인 설정
-                .oauth2Login(oauth ->
-                        oauth.userInfoEndpoint(c -> c.userService(oAuth2UserService)) // 사용자 정보 가져오는 설정
-                                .successHandler(oAuth2SuccessHandler) // 로그인 성공 핸들러 설정
-                                .failureHandler(new OAuth2FailureHandler())
                 )
 
                 // JWT 필터 설정

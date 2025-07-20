@@ -36,3 +36,12 @@ logging.level:
   org.springframework.boot.autoconfigure: ERROR
   org.hibernate.SQL: debug
   org.hibernate.orm.jdbc.bind: trace
+
+oauth:
+  kakao:
+    client-id: ${KAKAO_CLIENT}
+    client-secret: ${KAKAO_SECRET}
+#    redirect-uri: ${ENDPOINT}/auth/kakao/callback
+    token-uri: https://kauth.kakao.com/oauth/token
+    user-info-uri: https://kapi.kakao.com/v2/user/me
+

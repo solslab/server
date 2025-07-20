@@ -3,9 +3,14 @@ package kr.sols.auth.service;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.sols.auth.dto.CheckTokenResponse;
+import kr.sols.auth.dto.KakaoLoginRequest;
+import kr.sols.auth.dto.KakaoUserResponse;
+import kr.sols.auth.dto.TokenResponse;
 import kr.sols.auth.exception.TokenException;
 import kr.sols.auth.jwt.TokenProvider;
+import kr.sols.domain.member.entity.Member;
 import kr.sols.domain.member.entity.Role;
+import kr.sols.domain.member.repository.MemberRepository;
 import kr.sols.exception.ErrorCode;
 import kr.sols.redis.Token;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
     private final TokenProvider tokenProvider;
     private final TokenService tokenService;
+    private final KakaoOAuthService kakaoOAuthService;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public CheckTokenResponse checkTokenAndRefresh(String accessToken, HttpServletResponse response) {
@@ -50,6 +57,18 @@ public class AuthService {
             role = role.replaceFirst("ROLE_", "");
         }
         return role;
+    }
+
+
+    public TokenResponse loginWithKakao(KakaoLoginRequest request) {
+        String accessToken = kakaoOAuthService.getAccessToken(request.getCode(), request.getRedirectUri());
+        KakaoUserResponse kakaoUser = kakaoOAuthService.getUserInfo(accessToken);
+
+        Member member = memberRepository.findByEmail(kakaoUser.getEmail())
+                .orElseGet(() -> memberRepository.save(kakaoUser.toMember()));
+
+        String token = tokenProvider.generateAccessToken(member.getMemberKey(), member.getRole());
+        return new TokenResponse(token);
     }
 
 }

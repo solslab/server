@@ -2,6 +2,7 @@ package kr.sols.auth.jwt;
 
 import kr.sols.auth.exception.TokenException;
 import kr.sols.auth.service.TokenService;
+import kr.sols.domain.member.entity.Role;
 import kr.sols.redis.Token;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -48,6 +49,17 @@ public class TokenProvider {
     public String generateAccessToken(Authentication authentication) {
         return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
     }
+
+    // overloading
+    public String generateAccessToken(String memberKey, Role role) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                memberKey,
+                null,
+                List.of(new SimpleGrantedAuthority(role.getKey()))
+        );
+        return generateAccessToken(authentication);
+    }
+
 
     public void generateRefreshToken(Authentication authentication, String accessToken) {
         String refreshToken = generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME);

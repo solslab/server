@@ -3,20 +3,15 @@ package kr.sols.auth.controller;
 //import kr.sols.notification.service.RedisMessageService;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.sols.auth.dto.CheckTokenResponse;
-import kr.sols.auth.dto.LoginResponse;
-import kr.sols.auth.jwt.TokenProvider;
+import kr.sols.auth.dto.KakaoLoginRequest;
+import kr.sols.auth.dto.TokenResponse;
 import kr.sols.auth.service.AuthService;
 import kr.sols.auth.service.TokenService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,10 +21,9 @@ public class AuthController {
     private final TokenService tokenService;
     private final AuthService authService;
 
-    @GetMapping("/auth/success")
-    public ResponseEntity<LoginResponse> loginSuccess(@Valid LoginResponse loginResponse) {
-        // 로그인 성공 응답을 생성하여 반환
-        return ResponseEntity.ok(loginResponse);
+    @PostMapping("/auth/kakao")
+    public ResponseEntity<TokenResponse> kakaoLogin(@RequestBody KakaoLoginRequest request) {
+        return ResponseEntity.ok(authService.loginWithKakao(request));
     }
 
     @DeleteMapping("/auth/logout")
@@ -48,20 +42,5 @@ public class AuthController {
 
         // 토큰 값으로 서비스 호출
         return ResponseEntity.ok(authService.checkTokenAndRefresh(token, response));
-    }
-
-    @GetMapping("/loginTest")
-    public String getHtmlPage() {
-        return "<!DOCTYPE html>" +
-                "<html lang=\"en\">" +
-                "<head>" +
-                "<meta charset=\"UTF-8\">" +
-                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
-                "<title>로그인</title>" +
-                "</head>" +
-                "<body>" +
-                "<a href=\"oauth2/authorization/kakao\" id=\"kakao-login-btn\">카카오 로그인</a>" +
-                "</body>" +
-                "</html>";
     }
 }
