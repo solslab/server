@@ -74,12 +74,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/**"),
-                                new AntPathRequestMatcher("/auth/success"),
                                 new AntPathRequestMatcher("/auth/check"),
                                 new AntPathRequestMatcher("/auth/kakao/**"),
                                 new AntPathRequestMatcher("/company/**", "GET"),
                                 new AntPathRequestMatcher("/admin/login"),
-                                new AntPathRequestMatcher("/admin", "POST"),
                                 new AntPathRequestMatcher("/feedback", "POST"),
                                 new AntPathRequestMatcher("/dev/**")
                         ).permitAll()
