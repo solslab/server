@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 
 services:
   sols-app:
@@ -8,8 +8,10 @@ services:
       - "8080:8080"
     depends_on:
       - sols-redis
-    environment:
-      TZ: "Asia/Seoul"
+      - sols-mysql
+    env_file:
+      - .env
+    restart: unless-stopped
 
   sols-redis:
     image: redis:latest
@@ -17,3 +19,16 @@ services:
     hostname: redis
     ports:
       - "6379:6379"
+    restart: unless-stopped
+
+  sols-mysql:
+    image: mysql:latest
+    container_name: sols-mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
