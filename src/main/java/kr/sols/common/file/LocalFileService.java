@@ -15,10 +15,6 @@ public class LocalFileService {
     @Value("${file.dir}")
     private String fileDir;
 
-    public String getCompanyLogoFullPath(String filename) {
-        return "/images/" + filename;
-    }
-
     // 파일 저장 로직
     public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
         if (multipartFile == null || multipartFile.isEmpty()) {

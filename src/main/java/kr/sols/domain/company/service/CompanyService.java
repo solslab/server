@@ -62,7 +62,7 @@ public class CompanyService {
 
         List<CompanyListDto> companies = companyPage.getContent()
                 .stream()
-                .map(company -> CompanyListDto.fromEntity(company, localFileService))
+                .map(CompanyListDto::fromEntity)
                 .toList();
 
         return CompanyPageDto.builder()
@@ -87,7 +87,7 @@ public class CompanyService {
 
         List<CompanyListDto> companies = companyPage.getContent()
                 .stream()
-                .map(company -> CompanyListDto.fromEntity(company, localFileService))
+                .map(CompanyListDto::fromEntity)
                 .toList();
 
         return CompanyPageDto.builder()
@@ -110,7 +110,7 @@ public class CompanyService {
                 .map(PositionListDto::fromEntity)
                 .collect(Collectors.toList());
 
-        return CompanyDetailDto.fromEntity(company, positionDtos, localFileService);
+        return CompanyDetailDto.fromEntity(company, positionDtos);
     }
 
     @Transactional
@@ -156,7 +156,7 @@ public class CompanyService {
         company.setCompanyLogo(uploadFile.getStoreFilename());
         companyRepository.save(company);
 
-        return CompanyLogoDto.from(uploadFile, localFileService);
+        return new CompanyLogoDto(uploadFile.getStoreFilename());
     }
 
     @Transactional
@@ -181,8 +181,9 @@ public class CompanyService {
         }
 
         List<Company> companies = companyRepository.searchCompanyByTerm(searchTerm);
+
         return companies.stream()
-                .map(company -> CompanyListDto.fromEntity(company, localFileService))
+                .map(CompanyListDto::fromEntity)
                 .toList();
     }
 
@@ -195,7 +196,7 @@ public class CompanyService {
 
         List<Company> companies = companyRepository.searchAllCompanyByTerm(searchTerm);
         return companies.stream()
-                .map(company -> CompanyListDto.fromEntity(company, localFileService))
+                .map(CompanyListDto::fromEntity)
                 .toList();
     }
 
@@ -208,7 +209,7 @@ public class CompanyService {
 
         List<Company> companies = companyRepository.searchPrivateCompanyByTerm(searchTerm);
         return companies.stream()
-                .map(company -> CompanyListDto.fromEntity(company, localFileService))
+                .map(CompanyListDto::fromEntity)
                 .toList();
     }
 
@@ -218,7 +219,7 @@ public class CompanyService {
         List<Company> companies = companyRepository.findRandomCompaniesForHome();
 
         return companies.stream()
-                .map(company -> CompanyListDto.fromEntity(company, localFileService))
+                .map(CompanyListDto::fromEntity)
                 .toList();
 
     }

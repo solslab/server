@@ -1,6 +1,5 @@
 package kr.sols.domain.company.dto;
 
-import kr.sols.common.file.LocalFileService;
 import kr.sols.domain.company.entity.Company;
 import kr.sols.domain.position.dto.PositionListDto;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Builder
@@ -23,18 +21,11 @@ public class CompanyDetailDto {
     private boolean isPublic;
     private List<PositionListDto> positions;
 
-    public static CompanyDetailDto fromEntity(Company company, List<PositionListDto> positions, LocalFileService fileService) {
-        String logoUrl = null;
-        String storedFilename = company.getCompanyLogo();
-
-        if (storedFilename != null && !storedFilename.isBlank()) {
-            logoUrl = fileService.getCompanyLogoFullPath(storedFilename);
-        }
-
+    public static CompanyDetailDto fromEntity(Company company, List<PositionListDto> positions) {
         return CompanyDetailDto.builder()
                 .companyName(company.getCompanyName())
                 .industryType(company.getIndustryType())
-                .companyLogo(logoUrl) // 변환된 URL을 세팅
+                .companyLogo(company.getCompanyLogo()) // 변환된 URL을 세팅
                 .searchTerms(company.getSearchTerms())
                 .isPublic(company.isPublic())
                 .positions(positions)
