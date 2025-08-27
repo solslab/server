@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   sols-app:
     image: gyujh630/sols-app:latest
@@ -10,8 +8,6 @@ services:
       - sols-redis
       - sols-mysql
     restart: unless-stopped
-    environment:
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
     networks:
       - sols-network
 

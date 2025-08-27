@@ -78,11 +78,12 @@ public class CompanyController {
     // 기업 로고 생성(변경)
     @RoleAdmin
     @PostMapping(path = "/{id}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<CompanyLogoDto> uploadCompanyLogo(@PathVariable UUID id,
-                                                            @RequestPart(value = "fileName") String fileName,
-                                                            @RequestPart(value = "file", required = false) MultipartFile multipartFile) throws IOException {
-        String extend = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf("."));
-        return ResponseEntity.ok(companyService.uploadCompanyLogo(id, fileName, multipartFile, extend));
+    public ResponseEntity<CompanyLogoDto> uploadCompanyLogo(
+            @PathVariable UUID id,
+            @RequestPart(value = "file") MultipartFile multipartFile) throws IOException {
+
+        CompanyLogoDto responseDto = companyService.uploadCompanyLogo(id, multipartFile);
+        return ResponseEntity.ok(responseDto);
     }
 
     // 기업 로고 삭제

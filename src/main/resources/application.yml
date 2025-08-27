@@ -18,20 +18,11 @@ spring:
   servlet:
     multipart:
       file-size-threshold: 2MB
-      location: /tmp/s3
+      location: /tmp/file-uploads
       max-file-size: 5MB
       max-request-size: 10MB
   jackson:
     property-naming-strategy: SNAKE_CASE
-cloud:
-  aws:
-    s3:
-      bucket: solslab
-    region:
-      static: ap-northeast-2
-      auto: false
-    stack:
-      auto: false
 
 logging.level:
   org.springframework.boot.autoconfigure: ERROR

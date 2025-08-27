@@ -8,7 +8,8 @@ import kr.sols.domain.position.dto.PositionListDto;
 import kr.sols.domain.position.entity.Position;
 import kr.sols.domain.position.repository.PositionRepository;
 import kr.sols.domain.testReview.repository.TestReviewRepository;
-import kr.sols.s3.S3Service;
+import kr.sols.common.file.LocalFileService; // import 변경
+import kr.sols.common.file.dto.UploadFile;   // import 추가
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +28,7 @@ import static kr.sols.exception.ErrorCode.*;
 @Service
 @RequiredArgsConstructor
 public class CompanyService {
-    private final S3Service s3Service;
+    private final LocalFileService localFileService;
     private final CompanyRepository companyRepository;
     private final PositionRepository positionRepository;
     private final TestReviewRepository testReviewRepository;
@@ -61,7 +62,7 @@ public class CompanyService {
 
         List<CompanyListDto> companies = companyPage.getContent()
                 .stream()
-                .map(CompanyListDto::fromEntity)
+                .map(company -> CompanyListDto.fromEntity(company, localFileService))
                 .toList();
 
         return CompanyPageDto.builder()
@@ -86,7 +87,7 @@ public class CompanyService {
 
         List<CompanyListDto> companies = companyPage.getContent()
                 .stream()
-                .map(CompanyListDto::fromEntity)
+                .map(company -> CompanyListDto.fromEntity(company, localFileService))
                 .toList();
 
         return CompanyPageDto.builder()
@@ -109,7 +110,7 @@ public class CompanyService {
                 .map(PositionListDto::fromEntity)
                 .collect(Collectors.toList());
 
-        return CompanyDetailDto.fromEntity(company, positionDtos);
+        return CompanyDetailDto.fromEntity(company, positionDtos, localFileService);
     }
 
     @Transactional
@@ -132,29 +133,30 @@ public class CompanyService {
         // 직무가 있다면 삭제
         positionRepository.deleteAllByCompanyId(id);
 
-        // 로고가 있다면 S3에서 삭제
+        // 로고가 있다면 삭제
         if (company.getCompanyLogo() != null) {
-            s3Service.deleteFile(company.getCompanyLogo());
+            localFileService.deleteFile(company.getCompanyLogo());
         }
 
         companyRepository.deleteById(id);
     }
 
     @Transactional
-    public CompanyLogoDto uploadCompanyLogo(UUID id, String fileName, MultipartFile multipartFile, String extend) throws IOException {
+    public CompanyLogoDto uploadCompanyLogo(UUID id, MultipartFile multipartFile) throws IOException {
         Company company = companyRepository.findById(id).orElseThrow(() -> new CompanyException(COMPANY_NOT_FOUND));
 
-        // 이미 로고가 있다면 S3에서 삭제
+        // 기존 파일 삭제
         if (company.getCompanyLogo() != null) {
-            s3Service.deleteFile(company.getCompanyLogo());
+            localFileService.deleteFile(company.getCompanyLogo());
         }
 
-        // 로고 등록(교체)
-        String url = s3Service.upload(fileName, multipartFile, extend);
-        company.setCompanyLogo(url);
+        UploadFile uploadFile = localFileService.storeFile(multipartFile);
+
+        // DB에는 고유 파일 이름만 저장
+        company.setCompanyLogo(uploadFile.getStoreFilename());
         companyRepository.save(company);
 
-        return new CompanyLogoDto(url);
+        return CompanyLogoDto.from(uploadFile, localFileService);
     }
 
     @Transactional
@@ -164,8 +166,8 @@ public class CompanyService {
 
         // 로고가 있다면 삭제
         if (company.getCompanyLogo() != null) {
-            s3Service.deleteFile(company.getCompanyLogo()); // S3
-            company.setCompanyLogo(null); // DB
+            localFileService.deleteFile(company.getCompanyLogo()); // 교체!
+            company.setCompanyLogo(null);
         }
 
         companyRepository.save(company);
@@ -180,7 +182,7 @@ public class CompanyService {
 
         List<Company> companies = companyRepository.searchCompanyByTerm(searchTerm);
         return companies.stream()
-                .map(CompanyListDto::fromEntity)
+                .map(company -> CompanyListDto.fromEntity(company, localFileService))
                 .toList();
     }
 
@@ -193,7 +195,7 @@ public class CompanyService {
 
         List<Company> companies = companyRepository.searchAllCompanyByTerm(searchTerm);
         return companies.stream()
-                .map(CompanyListDto::fromEntity)
+                .map(company -> CompanyListDto.fromEntity(company, localFileService))
                 .toList();
     }
 
@@ -206,7 +208,7 @@ public class CompanyService {
 
         List<Company> companies = companyRepository.searchPrivateCompanyByTerm(searchTerm);
         return companies.stream()
-                .map(CompanyListDto::fromEntity)
+                .map(company -> CompanyListDto.fromEntity(company, localFileService))
                 .toList();
     }
 
@@ -216,7 +218,7 @@ public class CompanyService {
         List<Company> companies = companyRepository.findRandomCompaniesForHome();
 
         return companies.stream()
-                .map(CompanyListDto::fromEntity)
+                .map(company -> CompanyListDto.fromEntity(company, localFileService))
                 .toList();
 
     }

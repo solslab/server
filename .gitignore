@@ -42,3 +42,6 @@ out/
 ### Security ###
 application-dev.properties
 application-prod.properties
+
+.env
+/uploads
