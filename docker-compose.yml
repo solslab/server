@@ -10,6 +10,10 @@ services:
     restart: unless-stopped
     networks:
       - sols-network
+    environment:
+      file.dir: ${file.dir}
+    volumes:
+      - ${file.dir}:${file.dir}
 
   sols-redis:
     image: redis:latest
