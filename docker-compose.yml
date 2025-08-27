@@ -11,9 +11,9 @@ services:
     networks:
       - sols-network
     environment:
-      file.dir: ${file.dir}
+      FILE_DIR: ${FILE_DIR}
     volumes:
-      - ${file.dir}:${file.dir}
+      - ${FILE_DIR}:${FILE_DIR}
 
   sols-redis:
     image: redis:latest
