@@ -8,9 +8,9 @@ spring:
     hikari:
       maximum-pool-size: 10
       minimum-idle: 2
-      idle-timeout: 300000         # 5분 후 idle connection 제거
-      max-lifetime: 600000         # 10분마다 커넥션 재생성
-      connection-timeout: 10000    # 10초 이상 대기 시 timeout
+      idle-timeout: 300000
+      max-lifetime: 600000
+      connection-timeout: 10000
 
   jpa:
     database: mysql
